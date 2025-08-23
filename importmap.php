@@ -16,6 +16,10 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    'adminApp' => [
+        'path' => './assets/adminApp.js',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
@@ -25,4 +29,5 @@ return [
     '@hotwired/turbo' => [
         'version' => '7.3.0',
     ],
+    
 ];

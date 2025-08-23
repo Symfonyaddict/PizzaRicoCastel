@@ -1,0 +1,7 @@
+{% for type, messages in app.flashes %}
+    <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
+        {{ messages | join('. ') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+{% endfor %}

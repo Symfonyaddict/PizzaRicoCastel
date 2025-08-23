@@ -1,0 +1,86 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+<!-- Delete User Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteUserModalLabel">Confirmation de suppression</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Êtes-vous sûr de vouloir supprimer cet utilisateur ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <a href="#" id="confirmDeleteBtn" class="btn btn-danger" data-delete-url="{{ path('app_admin_user_delete', {'id': 'USER_ID'}) }}">Supprimer</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="admin-layout">
+    <!-- Sidebar Admin -->
+    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+    
+    <!-- Main Content -->
+    <div class="admin-content" id="adminContent">
+        
+        <!-- Main Content Area -->
+        <div class="admin-main-content p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">{{ title }}</h1>
+                <a href="{{ path('app_register') }}" class="btn-admin btn-admin-primary"><i class="bi bi-plus-circle me-2"></i>Ajouter un utilisateur</a>
+            </div>
+            
+            <!-- Users List -->
+            <div class="card shadow-sm">
+                <div class="card-header py-3">
+                    <h5 class="mb-0 fw-bold">Utilisateurs</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="admin-table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th width="100">Avatar</th>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th class="d-none d-md-table-cell">Rôle</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for users in user %}
+                                <tr>
+                                    <td>
+                                        <div class="avatar-circle">
+                                            <span class="initials">{{ users.firstname|first }}{{ users.name|first }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ users.firstname }} {{ users.name }}</td>
+                                    <td>{{ users.email }}</td>
+                                    <td class="d-none d-md-table-cell">
+                                        {% for role in users.roles %}
+                                            <span class="badge bg-primary">{{ role }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-1">
+                                            <a href="{{ path('app_admin_user_edit', {'id': users.id}) }}" class="btn-admin btn-admin-success btn-sm"><i class="bi bi-pencil"></i></a>
+                                            <button type="button" class="btn-admin btn-admin-danger btn-sm delete-user" data-bs-toggle="modal" data-bs-target="#deleteUserModal" data-user-id="{{ users.id }}"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+{% endblock %}

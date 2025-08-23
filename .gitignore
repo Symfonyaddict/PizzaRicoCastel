@@ -18,3 +18,11 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+# Fichiers de sortie temporaires
+/page_output.html
+/page_output_readable.html
+
+# Fichiers système
+.DS_Store
+Thumbs.db

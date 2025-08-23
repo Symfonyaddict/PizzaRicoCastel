@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription - Pizza Rico{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center my-5">
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-0 overflow-hidden">
+            <div class="row g-0">
+                <div class="col-md-7">
+                    <div class="p-4">
+                        <h2 class="mb-4 text-center" style="color: var(--primary);"><i class="fas fa-user-plus me-2"></i>Créer un compte</h2>
+                {% if form_errors(registrationForm) %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(registrationForm) }}
+                    </div>
+                {% endif %}
+
+                {{ form_start(registrationForm, {'attr': {'style': 'display: block !important;'}}) }}
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.email, 'Adresse email', {'label_attr': {'class': 'form-label'}}) }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control form-control-lg border-start-0', 'placeholder': 'Entrez votre adresse email'}}) }}
+                        </div>
+                        <small class="text-muted">Nous ne partagerons jamais votre email avec des tiers.</small>
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.firstname, 'Votre prénom', {'label_attr': {'class': 'form-label'}}) }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control form-control-lg border-start-0', 'placeholder': 'Entrez votre prénom'}}) }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.name, 'Votre nom', {'label_attr': {'class': 'form-label'}}) }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            {{ form_widget(registrationForm.name, {'attr': {'class': 'form-control form-control-lg border-start-0', 'placeholder': 'Entrez votre nom'}}) }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control form-control-lg border-start-0', 'placeholder': 'Choisissez un mot de passe sécurisé'}}) }}
+                        </div>
+                    </div>
+
+                    <div class="mb-4 form-check custom-checkbox">
+                        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                        {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions d\'utilisation', {'label_attr': {'class': 'form-check-label'}}) }}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-lg text-white shadow-sm" style="background-color: var(--primary);"><i class="fas fa-user-plus me-2"></i>S'inscrire</button>
+                    </div>
+                {{ form_end(registrationForm) }}
+
+                <div class="mt-3 text-center">
+                    <p>Vous avez déjà un compte ? <a href="{{ path('app_login') }}" style="color: var(--primary);">Connectez-vous</a></p>
+                </div>
+                    </div>
+                </div>
+                <div class="col-md-5 p-0" style="min-height: 100%;">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2070&auto=format&fit=crop" alt="Délicieuse pizza" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

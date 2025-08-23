@@ -1,0 +1,150 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block body %}
+    <div class="admin-layout">
+        <!-- Sidebar Admin -->
+        {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+        
+        <!-- Main Content -->
+        <div class="admin-content" id="adminContent">
+            
+            <!-- Main Content Area -->
+            <div class="admin-main-content p-4">
+            {% if app.user %}
+            <h1 class="mb-4">Bienvenue sur ton tableau de bord {{ app.user.firstname }}</h1>
+            {% endif %}
+                
+                <!-- Pizzas -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-header py-3">
+                                <h5 class="mb-0 fw-bold">Pizzas</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="admin-table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Nom</th>
+                                        <th class="d-none d-md-table-cell">Description</th>
+                                        <th class="d-none d-sm-table-cell">Prix Petite</th>
+                                        <th class="d-none d-sm-table-cell">Prix Grande</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for pizza in pizzas %}
+                                    <tr>
+                                        <td>
+                                            {% if pizza.image %}
+                                                <img src="{{ asset('images/pizzas/' ~ pizza.image) }}" alt="{{ pizza.name }}" class="img-thumbnail" width="50">
+                                            {% else %}
+                                                <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="{{ pizza.name }}" class="img-thumbnail" width="50">
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ pizza.name }}</td>
+                                        <td class="d-none d-md-table-cell">{{ pizza.ingredient }}</td>
+                                        <td>{{ pizza.priceMedium }} €</td>
+                                        <td class="d-none d-sm-table-cell">{{ pizza.priceLarge }} €</td>
+
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">Aucune pizza trouvée</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Boissons -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-header py-3">
+                                <h5 class="mb-0 fw-bold">Boissons</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="admin-table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Nom</th>
+                                        <th class="d-none d-md-table-cell">Description</th>
+                                        <th class="d-none d-sm-table-cell">Prix</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="5" class="text-center">Aucune boisson disponible. La fonctionnalité de gestion des boissons n'est pas encore implémentée.</td>
+                                    </tr>
+                                </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Utilisateurs -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-header py-3">
+                                <h5 class="mb-0 fw-bold">Utilisateurs</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="admin-table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Avatar</th>
+                                        <th class="d-none d-md-table-cell">Email</th>
+                                        <th>Prénom</th>
+                                        <th>Nom</th>
+                                        <th>Rôle</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                    <tr>
+                                        <td>
+                                            <div class="avatar-circle">
+                                                <span class="initials">{{ user.firstname|first }}{{ user.name|first }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="d-none d-md-table-cell">{{ user.email }}</td>
+                                        <td>{{ user.firstname }}</td>
+                                        <td>{{ user.name }}</td>
+                                        <td>
+                                            <span class="badge-status {% if 'ROLE_ADMIN' in user.roles %}badge-processing{% else %}badge-pending{% endif %}">
+                                                {% if 'ROLE_ADMIN' in user.roles %}Administrateur{% else %}Utilisateur{% endif %}
+                                            </span>
+                                        </td>
+
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

@@ -1,0 +1,181 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+<div class="admin-layout">
+    <!-- Sidebar Admin -->
+    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+    
+    <!-- Main Content -->
+    <div class="admin-content" id="adminContent">
+        
+        <!-- Main Content Area -->
+        <div class="admin-main-content p-4">
+            <h1 class="mb-4">{{ title }}</h1>
+            
+            <!-- Breadcrumb navigation -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb bg-dark p-3 rounded">
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin_dashboard') }}" class="text-decoration-none text-white"><i class="bi bi-house-door me-1"></i>Tableau de bord</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin_pizza') }}" class="text-decoration-none text-white"><i class="bi bi-grid me-1"></i>Pizzas</a></li>
+                    <li class="breadcrumb-item active text-white" aria-current="page"><i class="bi bi-pencil me-1"></i>Modification pizza</li>
+                </ol>
+            </nav>
+            
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle me-2"></i> {{ message }}
+                </div>
+            {% endfor %}
+            
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle me-2"></i> {{ message }}
+                </div>
+            {% endfor %}
+    
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">Informations de la pizza</h5>
+                    <span class="badge bg-success"><i class="bi bi-pencil me-1"></i> Modification</span>
+                </div>
+
+                <div class="card-body p-4 d-flex flex-column">
+                    {{ form_start(form, {'attr': {'class': 'needs-validation flex-grow-1 d-flex flex-column'}}) }}
+                        <div class="mb-3">
+                            {{ form_label(form.name, 'Nom de la pizza <span class="text-danger">*</span>', {'label_attr': {'class': 'form-label'}, 'label_html': true}) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Margherita'}}) }}
+                            <div class="form-text text-white"><i class="bi bi-info-circle me-1"></i> Nom commercial de la pizza</div>
+                            {{ form_errors(form.name) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.ingredient, 'Ingrédients <span class="text-danger">*</span>', {'label_attr': {'class': 'form-label'}, 'label_html': true}) }}
+                            {{ form_widget(form.ingredient, {'attr': {'class': 'form-control', 'rows': 3, 'placeholder': 'Sauce tomate, mozzarella, basilic frais...'}}) }}
+                            <div class="form-text text-white"><i class="bi bi-list-check me-1"></i> Listez tous les ingrédients principaux</div>
+                            {{ form_errors(form.ingredient) }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form_label(form.imageFile, 'Image', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+                            <div class="form-text text-white"><i class="bi bi-image me-1"></i>'Formats acceptés : JPG, PNG, WEBP. Taille maximale : 2Mo.</div>
+                            {{ form_errors(form.imageFile) }}
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form_label(form.priceMedium, 'Prix moyen <span class="text-danger">*</span>', {'label_attr': {'class': 'form-label'}, 'label_html': true}) }}
+                                <div class="input-group">
+                                    {{ form_widget(form.priceMedium, {'attr': {'class': 'form-control', 'placeholder': '12.90'}}) }}
+                                    <span class="input-group-text">€</span>
+                                </div>
+                                <div class="form-text text-white"><i class="bi bi-tag me-1"></i> Prix taille moyenne</div>
+                                {{ form_errors(form.priceMedium) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_label(form.priceLarge, 'Prix large <span class="text-danger">*</span>', {'label_attr': {'class': 'form-label'}, 'label_html': true}) }}
+                                <div class="input-group">
+                                    {{ form_widget(form.priceLarge, {'attr': {'class': 'form-control', 'placeholder': '16.90'}}) }}
+                                    <span class="input-group-text">€</span>
+                                </div>
+                                <div class="form-text text-white"><i class="bi bi-tag-fill me-1"></i> Prix grande taille</div>
+                                {{ form_errors(form.priceLarge) }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-check mb-4">
+                            {{ form_widget(form.isSpecial, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(form.isSpecial, 'Pizza spéciale (mise en avant)', {'label_attr': {'class': 'form-check-label fw-bold'}}) }}
+                            <div class="form-text ms-4 text-white"><i class="bi bi-star-fill text-warning me-1"></i> Apparaîtra dans la section des offres spéciales</div>
+                            {{ form_errors(form.isSpecial) }}
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-auto">
+                            <a href="{{ path('app_admin_pizza') }}" class="btn-admin btn-admin-secondary"><i class="bi bi-arrow-left me-2"></i>Retour à la liste</a>
+                            <button type="button" class="btn-admin btn-admin-success" data-bs-toggle="modal" data-bs-target="#saveModal"><i class="bi bi-check-circle me-2"></i>Enregistrer</button>
+                        </div>
+                        
+                        <!-- Modal de confirmation pour l'enregistrement -->
+                        <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="saveModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="saveModalLabel">Confirmation</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><i class="bi bi-question-circle text-primary me-2 fs-4"></i> Êtes-vous sûr de vouloir enregistrer les modifications ?</p>
+                                        <div class="alert alert-info">
+                                            <small><i class="bi bi-info-circle me-1"></i> Les modifications seront immédiatement visibles sur le site.</small>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-success">Confirmer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Colonne d'informations à droite -->
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header py-3">
+                    <h5 class="mb-0 fw-bold">Aide et informations</h5>
+                </div>
+                <div class="card-body p-4 d-flex flex-column">
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-info-circle me-2"></i> Vous êtes en train de modifier la pizza <strong>{{ pizza.name }}</strong>. Tous les champs marqués d'un <span class="text-danger">*</span> sont obligatoires.
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6 class="fw-bold"><i class="bi bi-info-circle-fill text-primary me-2"></i>À propos de cette page</h6>
+                        <p>Cette page vous permet de modifier les informations d'une pizza existante. Les modifications seront visibles sur le site après validation.</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6 class="fw-bold"><i class="bi bi-lightbulb-fill text-warning me-2"></i>Conseils pour la modification</h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="bi bi-check-circle text-success me-2"></i>Vérifiez que tous les ingrédients sont correctement listés</li>
+                            <li class="list-group-item"><i class="bi bi-check-circle text-success me-2"></i>Assurez-vous que les prix sont à jour</li>
+                            <li class="list-group-item"><i class="bi bi-check-circle text-success me-2"></i>Utilisez une image de qualité pour mettre en valeur votre pizza</li>
+                            <li class="list-group-item"><i class="bi bi-check-circle text-success me-2"></i>Vérifiez le statut "spécial" si nécessaire</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6 class="fw-bold"><i class="bi bi-star-fill text-warning me-2"></i>Pizzas spéciales</h6>
+                        <p>Les pizzas marquées comme "spéciales" bénéficient d'une mise en avant sur la page d'accueil du site dans la section des offres spéciales.</p>
+                        <div class="alert alert-warning mt-2">
+                            <i class="bi bi-exclamation-triangle me-2"></i> Limitez le nombre de pizzas spéciales pour maintenir leur caractère exclusif.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6 class="fw-bold"><i class="bi bi-image text-info me-2"></i>Images des pizzas</h6>
+                        <p>Pour une présentation optimale, utilisez des images :</p>
+                        <ul>
+                            <li>Au format carré ou 16:9</li>
+                            <li>D'une résolution minimale de 800x800 pixels</li>
+                            <li>Bien éclairées et mettant en valeur les ingrédients</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="alert alert-info mt-auto">
+                        <i class="bi bi-question-circle me-2"></i>Besoin d'aide supplémentaire ? Contactez l'administrateur système.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
