@@ -12,14 +12,24 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * Formulaire d'inscription pour les nouveaux utilisateurs.
+ */
 class RegistrationFormType extends AbstractType
 {
+    /**
+     * Construit le formulaire d'inscription.
+     *
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email')
             ->add('firstname')
             ->add('name')
+            // Case à cocher pour accepter les conditions d'utilisation, non mappée sur l'entité User
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
@@ -28,9 +38,11 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+            // Champ pour le mot de passe en clair
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
+                // Non mappé pour éviter de stocker le mot de passe en clair en base
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
@@ -48,6 +60,11 @@ class RegistrationFormType extends AbstractType
         ;
     }
 
+    /**
+     * Configure l'association entre ce formulaire et l'entité User.
+     *
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

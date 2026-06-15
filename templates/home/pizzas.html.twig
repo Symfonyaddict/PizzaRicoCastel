@@ -1,0 +1,83 @@
+{# Template affichant la liste de toutes les pizzas. #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <!-- Hero Section pour la page des pizzas -->
+    <section class="page-header py-5 mb-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="display-4 fw-bold">Nos Pizzas</h1>
+                    <p class="lead">Découvrez toutes nos délicieuses pizzas préparées avec des ingrédients frais et de qualité</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Pizzas -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                {# Message affiché si le catalogue de pizzas est vide #}
+                {% if pizzas is empty %}
+                    <div class="col-12 text-center">
+                        <p class="lead">Aucune pizza n'est disponible pour le moment.</p>
+                    </div>
+                {% else %}
+                    {# Parcours de toutes les pizzas récupérées depuis la base de données #}
+                    {% for pizza in pizzas %}
+                        <div class="col-12 col-sm-6 col-lg-4 mb-4">
+                            <div class="menu-card h-100">
+                                {# Gestion de l'affichage de l'image (personnalisée ou par défaut) #}
+                                {% if pizza.image %}
+                                    <img src="{{ asset('images/pizzas/' ~ pizza.image) }}" class="card-img-top" alt="{{ pizza.name }}">
+                                {% else %}
+                                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38" class="card-img-top" alt="{{ pizza.name }}">
+                                {% endif %}
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">{{ pizza.name }}</h5>
+                                    <p class="ingredients flex-grow-1">{{ pizza.ingredient }}</p>
+                                    <div class="mb-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="text-muted small">Petite</span>
+                                            <span class="dotted-line flex-grow-1 mx-2"></span>
+                                            {# Formatage du prix avec 2 décimales #}
+                                            <span class="price">{{ pizza.priceMedium|number_format(2, ',', '') }} €</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="text-muted small">Grande</span>
+                                            <span class="dotted-line flex-grow-1 mx-2"></span>
+                                            <span class="price">{{ pizza.priceLarge|number_format(2, ',', '') }} €</span>
+                                        </div>
+                                    </div>
+                                    {# Badge pour mettre en évidence les spécialités #}
+                                    {% if pizza.isSpecial %}
+                                        <div class="special-badge">Spécialité</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section py-5 mt-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2>Envie de déguster nos pizzas ?</h2>
+                    <p class="h3">Venez nous rendre visite au 7bis place des Belges 82100 Castelsarrasin <br>(proche de la poste)</p>
+                    <p class="mt-3 h3">Ou appelez-nous au:</p>
+                    <div class="mt-3 h1 text-danger">
+                        <i class="bi bi-telephone me-2"> <span class="h1 text-danger"> 05 63 32 14 43</span></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

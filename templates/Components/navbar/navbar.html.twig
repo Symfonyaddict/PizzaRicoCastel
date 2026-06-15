@@ -1,4 +1,5 @@
 <!-- Responsive Navbar -->
+            {# Barre de navigation principale avec gestion de l'état actif via l'extension Twig personnalisée #}
             <nav class="navbar navbar-expand-lg fixed-top">
                 <div class="container">
                     <a class="navbar-brand" href="{{ path('app_home') }}">  <i class="fas fa-pizza-slice me-2"></i><span class="fw-bold">Pizza Rico</span></a>
@@ -8,15 +9,14 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Accueil</a>
+                                <a class="nav-link {{ 'app_home'|is_active_route }}" aria-current="{{ 'app_home'|is_active_route ? 'page' : '' }}" href="{{ path('app_home') }}">Accueil</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Nos pizzas</a>
+                                <a class="nav-link {{ 'app_pizzas'|is_active_route }}" aria-current="{{ 'app_pizzas'|is_active_route ? 'page' : '' }}" href="{{ path('app_pizzas') }}">Nos pizzas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Boissons</a>
-                            </li>
-                            <li class="nav-item">
+                                <a class="nav-link {{ 'app_boissons'|is_active_route }}" aria-current="{{ 'app_boissons'|is_active_route ? 'page' : '' }}" href="{{ path('app_boissons') }}">Nos boissons</a>
+                            </li class="nav-item">
                                 <a class="nav-link" href="#">À propos</a>
                             </li>
                             <li class="nav-item">
@@ -24,7 +24,7 @@
                             </li>
                             {% if app.user %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path ('app_admin_dashboard') }}">Administration</a>
+                                <a class="nav-link {{ 'app_admin_dashboard'|is_active_route }}" aria-current="{{ 'app_admin_dashboard'|is_active_route ? 'page' : '' }}" href="{{ path ('app_admin_dashboard') }}">Administration</a>
                             </li>
                             {% endif %}
                         </ul>

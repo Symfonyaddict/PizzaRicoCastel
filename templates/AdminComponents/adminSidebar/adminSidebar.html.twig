@@ -10,19 +10,23 @@
     </div>
     
     <div class="mt-auto">
-        <a href="{{ path('app_admin_dashboard') }}" class="nav-link active">
+        <a href="{{ path('app_admin_dashboard') }}" class="nav-link {{ 'app_admin_dashboard'|is_active_route }}">
             <i class="bi bi-speedometer2"></i>
             <span>Tableau de bord</span>
         </a>
-        <a href="{{ path('app_admin_pizza') }}" class="nav-link">
+        <a href="{{ path('app_admin_pizza') }}" class="nav-link {{ 'app_admin_pizza'|is_active_route }}">
             <i class="bi bi-card-list"></i>
             <span>Gérer les Pizzas</span>
         </a>
-        <a href="#" class="nav-link">
+        <a href="{{ path('app_admin_boisson') }}" class="nav-link {{ 'app_admin_boisson'|is_active_route }}">
             <i class="bi bi-cup-straw"></i>
             <span>Gérer les Boissons</span>
         </a>
-        <a href="{{ path('app_admin_user') }}" class="nav-link">
+        <a href="{{ path('app_admin_hero') }}" class="nav-link {{ 'app_admin_hero'|is_active_route }}">
+            <i class="bi bi-image"></i>
+            <span>Gérer les Sections Hero</span>
+        </a>
+        <a href="{{ path('app_admin_user') }}" class="nav-link {{ 'app_admin_user'|is_active_route }}">
             <i class="bi bi-people"></i>
             <span>Gérer les Utilisateurs</span>
         </a>

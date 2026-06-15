@@ -3,10 +3,10 @@ import './styles/adminApp.css';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Gestion de la modal de suppression d'utilisateur
-    const deleteButtons = document.querySelectorAll('.delete-user');
+    const deleteUserButtons = document.querySelectorAll('.delete-user');
     
-    if (deleteButtons.length > 0) {
-        deleteButtons.forEach(button => {
+    if (deleteUserButtons.length > 0) {
+        deleteUserButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const userId = this.getAttribute('data-user-id');
                 const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
@@ -15,6 +15,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (deleteUrl) {
                         confirmDeleteBtn.href = deleteUrl.replace('USER_ID', userId);
                     }
+                }
+            });
+        });
+    }
+    
+    // Gestion de la modal de suppression des sections hero
+    const deleteHeroButtons = document.querySelectorAll('.delete-hero');
+    const deleteHeroForm = document.getElementById('deleteHeroForm');
+    
+    if (deleteHeroButtons.length > 0 && deleteHeroForm) {
+        const tokenInput = deleteHeroForm.querySelector('input[name="_token"]');
+        
+        deleteHeroButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const heroId = this.getAttribute('data-hero-id');
+                const csrfToken = this.getAttribute('data-csrf-token');
+                
+                // Mise à jour de l'action du formulaire avec l'ID correct
+                // Récupérer l'URL de base du formulaire et remplacer l'ID
+                const baseUrl = `/admin/hero/delete/${heroId}`;
+                deleteHeroForm.action = baseUrl;
+                
+                // Utilisation du token CSRF stocké dans l'attribut de données
+                if (tokenInput && csrfToken) {
+                    tokenInput.value = csrfToken;
                 }
             });
         });

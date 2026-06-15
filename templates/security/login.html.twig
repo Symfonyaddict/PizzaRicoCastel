@@ -1,3 +1,4 @@
+{# Template de la page de connexion #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Connexion - Pizza Rico{% endblock %}
@@ -11,12 +12,14 @@
                     <div class="p-4">
                         <h2 class="mb-4 text-center" style="color: var(--primary);"><i class="fas fa-sign-in-alt me-2"></i>Connexion</h2>
                 <form method="post" style="display: block !important;">
+                    {# Affichage des erreurs d'authentification s'il y en a #}
                     {% if error %}
                         <div class="alert alert-danger">
                             {{ error.messageKey|trans(error.messageData, 'security') }}
                         </div>
                     {% endif %}
 
+                    {# Message informatif si l'utilisateur est déjà connecté #}
                     {% if app.user %}
                         <div class="alert alert-info mb-3">
                             Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>

@@ -1,10 +1,22 @@
 <!-- Hero Section -->
+{% if hero is defined and hero is not null %}
+    <section class="hero text-center" {% if hero.background %}style="background-image: url('{{ asset('images/hero/' ~ hero.background) }}'); background-size: cover; background-position: center;"{% endif %}>
+        <div class="container">
+            <h1>{{ hero.title }}</h1>
+            <p>{{ hero.subTitle }}</p>
+            <div class="mt-4">
+                <a href="{{ path('app_pizzas') }}" class="btn btn-primary me-2"><i class="bi bi-journal-text me-2"></i>Carte de nos pizzas</a>
+            </div>
+        </div>
+    </section>
+{% else %}
     <section class="hero text-center">
         <div class="container">
             <h1>Bienvenue chez Pizza Rico</h1>
             <p>Au coeur de Castelsarrasin depuis 1995</p>
             <div class="mt-4">
-                <a href="#menu" class="btn btn-primary me-2"><i class="bi bi-journal-text me-2"></i>Carte de nos pizzas</a>
+                <a href="{{ path('app_pizzas') }}" class="btn btn-primary me-2"><i class="bi bi-journal-text me-2"></i>Carte de nos pizzas</a>
             </div>
         </div>
     </section>
+{% endif %}

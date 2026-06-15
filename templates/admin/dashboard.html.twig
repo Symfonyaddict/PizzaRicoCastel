@@ -1,3 +1,4 @@
+{# Template principal du tableau de bord d'administration #}
 {% extends 'layout.html.twig' %}
 
 {% block title %}Tableau de bord{% endblock %}
@@ -5,6 +6,7 @@
 {% block body %}
     <div class="admin-layout">
         <!-- Sidebar Admin -->
+        {# Inclusion de la barre latérale de navigation spécifique à l'administration #}
         {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
         
         <!-- Main Content -->

@@ -1,0 +1,73 @@
+{# Template affichant la liste de toutes les boissons. #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <!-- Hero Section pour la page des pizzas -->
+    <section class="page-header py-5 mb-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="display-4 fw-bold">Nos Boissons</h1>
+                    <p class="lead">Découvrez nos boissons</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Pizzas -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                {# Message affiché si le catalogue de boissons est vide #}
+                {% if boissons is empty %}
+                    <div class="col-12 text-center">
+                        <p class="lead">Aucune boisson n'est disponible pour le moment.</p>
+                    </div>
+                {% else %}
+                    {# Parcours de toutes les boissons récupérées depuis la base de données #}
+                    {% for boisson in boissons %}
+                        <div class="col-12 col-sm-6 col-lg-4 mb-4">
+                            <div class="menu-card h-100">
+                                {# Gestion de l'affichage de l'image (personnalisée ou par défaut) #}
+                                {% if boisson.image %}
+                                    <img src="{{ asset('images/boissons/' ~ boisson.image) }}" class="card-img-top" alt="{{ boisson.name }}">
+                                {% else %}
+                                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38" class="card-img-top" alt="{{ boisson.name }}">
+                                {% endif %}
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">{{ boisson.name }}</h5>
+                                    <p class="ingredients flex-grow-1">{{ boisson.ingredient }}</p>
+                                    <div class="mb-2">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="text-muted small">Petite</span>
+                                            <span class="dotted-line flex-grow-1 mx-2"></span>
+                                            {# Formatage du prix avec 2 décimales #}
+                                            <span class="price">{{ boisson.price|number_format(2, ',', '') }} €</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    {# <section class="cta-section py-5 mt-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2>Envie de déguster nos pizzas ?</h2>
+                    <p class="lead">Venez nous rendre visite ou commandez par téléphone !</p>
+                    <div class="mt-4">
+                        <a href="#" class="btn btn-primary btn-lg"><i class="bi bi-telephone me-2"></i>Appeler maintenant</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> #}
+{% endblock %}

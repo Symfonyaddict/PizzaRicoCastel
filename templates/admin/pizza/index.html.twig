@@ -19,8 +19,8 @@
         Êtes-vous sûr de vouloir supprimer cette pizza ?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-        <a href="#" id="confirmDeleteBtn" class="btn btn-danger" data-delete-url="{{ path('app_admin_pizza_delete', {'id': 'PIZZA_ID'}) }}">Supprimer</a>
+        <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>Annuler</button>
+        <a href="#" id="confirmDeleteBtn" class="btn-admin btn-admin-danger" data-delete-url="{{ path('app_admin_pizza_delete', {'id': 'PIZZA_ID'}) }}"><i class="bi bi-trash me-1"></i>Supprimer</a>
       </div>
     </div>
   </div>
@@ -79,11 +79,9 @@
                                         {{ pizza.priceMedium|number_format(2, ',', '') }}€ / {{ pizza.priceLarge|number_format(2, ',', '') }}€
                                     </td>
                                     <td>
-                                        {% if pizza.isSpecial %}
-                                            <span class="badge bg-success">Oui</span>
-                                        {% else %}
-                                            <span class="badge bg-secondary">Non</span>
-                                        {% endif %}
+                                        <span class="badge-status {% if pizza.isSpecial %}badge-processing{% else %}badge-pending{% endif %}">
+                                            {% if pizza.isSpecial %}Spéciale{% else %}Standard{% endif %}
+                                        </span>
                                     </td>
                                     <td>
                                         <div class="d-flex gap-1">

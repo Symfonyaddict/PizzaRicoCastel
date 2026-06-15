@@ -10,28 +10,51 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
+/**
+ * Entité représentant une Pizza dans le système.
+ * Utilise des callbacks de cycle de vie Doctrine pour générer automatiquement le slug.
+ * Utilise VichUploader pour la gestion de l'image de la pizza.
+ */
 #[ORM\Entity(repositoryClass: PizzaRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
 class Pizza
 {
+    /**
+     * @var int|null Identifiant unique de la pizza
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * @var string|null Nom de la pizza
+     */
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    /**
+     * @var string|null Liste des ingrédients de la pizza
+     */
     #[ORM\Column(type: Types::TEXT)]
     private ?string $ingredient = null;
 
+    /**
+     * @var string|null Version formatée pour l'URL (slug) du nom de la pizza
+     */
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    /**
+     * @var string|null Nom du fichier image stocké en base de données
+     */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
     
+    /**
+     * @var File|null Fichier physique de l'image (géré par VichUploader)
+     */
     #[Vich\UploadableField(mapping: 'pizza_images', fileNameProperty: 'image')]
     #[Assert\Image(
         maxSize: '2M',
@@ -40,15 +63,27 @@ class Pizza
     )]
     private ?File $imageFile = null;
     
+    /**
+     * @var \DateTimeInterface|null Date de dernière modification (nécessaire pour VichUploader)
+     */
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    /**
+     * @var float|null Prix de la pizza en taille moyenne
+     */
     #[ORM\Column]
     private ?float $priceMedium = null;
 
+    /**
+     * @var float|null Prix de la pizza en taille grande
+     */
     #[ORM\Column]
     private ?float $priceLarge = null;
 
+    /**
+     * @var bool|null Indique si c'est une pizza spéciale (ex: mise en avant)
+     */
     #[ORM\Column]
     private ?bool $isSpecial = null;
 

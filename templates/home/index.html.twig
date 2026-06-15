@@ -1,8 +1,11 @@
+{# Template de la page d'accueil. Hérite de base.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Pizza Rico - Saveurs Authentiques Italiennes{% endblock %}
+{# Définition du titre de la page #}
+{% block title %}Pizza Rico - Castelsarrasin{% endblock %}
 
 {% block body %}
+    {# Inclusion de la section Hero (bannière dynamique) #}
     {% include "Components/hero/hero.html.twig" %}
 
 <!-- À propos -->
@@ -29,13 +32,15 @@
         <div class="container">
             <h2 class="section-title mb-5">Nos Spécialités</h2>
             <div class="row">
+                {# Vérifie s'il y a des pizzas spéciales à afficher #}
                 {% if specialPizzas is empty %}
                     <div class="col-12 text-center">
                         <p class="lead">Nos spécialités seront bientôt disponibles !</p>
                     </div>
                 {% else %}
+                    {# Boucle sur les pizzas spéciales pour les afficher sous forme de cartes #}
                     {% for pizza in specialPizzas %}
-                        <div class="col-md-4 mb-4">
+                        <div class="col-12 col-sm-6 col-lg-4 mb-4">
                             <div class="menu-card h-100">
                                 {% if pizza.image %}
                                     <img src="{{ asset('images/pizzas/' ~ pizza.image) }}" class="card-img-top" alt="{{ pizza.name }}">
@@ -47,11 +52,13 @@
                                     <p class="ingredients flex-grow-1">{{ pizza.ingredient }}</p>
                                     <div class="mb-2">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span class="text-muted small">Petite</span>................................................................
+                                            <span class="text-muted small">Petite</span>
+                                            <span class="dotted-line flex-grow-1 mx-2"></span>
                                             <span class="price">{{ pizza.priceMedium|number_format(2, ',', '') }} €</span>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <span class="text-muted small">Grande</span>................................................................
+                                            <span class="text-muted small">Grande</span>
+                                            <span class="dotted-line flex-grow-1 mx-2"></span>
                                             <span class="price">{{ pizza.priceLarge|number_format(2, ',', '') }} €</span>
                                         </div>
                                     </div>
@@ -65,7 +72,7 @@
     </section>
 
     <!-- Témoignages -->
-    <section class="py-5">
+    {# <section class="py-5">
         <div class="container">
             <h2 class="section-title mb-5">Ce que disent nos clients</h2>
             <div class="row">
@@ -110,7 +117,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> #}
 
     <!-- Call to Action -->
     <section class="cta-section">
@@ -120,7 +127,7 @@
                     <h2>Envie d'une pizza délicieuse ?</h2>
                     <p class="lead">Venez nous rendre visite pour déguster nos délicieuses pizzas !</p>
                     <div class="text-center mt-4">
-                        <a href="#menu" class="btn btn-light btn-lg"><i class="bi bi-journal-text me-2"></i>Carte de nos pizzas</a>
+                        <a href="{{ path('app_pizzas') }}" class="btn btn-primary btn-lg"><i class="bi bi-journal-text me-2"></i>Carte de nos pizzas</a>
                     </div>
                 </div>
             </div>

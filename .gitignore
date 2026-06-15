@@ -26,3 +26,7 @@
 # Fichiers système
 .DS_Store
 Thumbs.db
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###

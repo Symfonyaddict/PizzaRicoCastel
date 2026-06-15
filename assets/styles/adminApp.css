@@ -1997,3 +1997,33 @@
     margin-bottom: 30px;
     max-width: 600px;
 }
+
+/* --- FIX: Responsive Image Previews --- */
+/* Garantit que les images d'aperçu dans les formulaires ne dépassent pas de leur conteneur et sont responsives */
+.vich-image img, 
+.vich-file img, 
+.admin-form img, 
+.card-body .form-group img,
+.card-body form img,
+.current-hero-preview img {
+    max-width: 100% !important;
+    max-height: 500px;
+    height: auto !important;
+    object-fit: contain;
+    display: block;
+    border-radius: var(--admin-border-radius, 8px);
+    margin-top: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Ajustement spécifique pour les petits écrans */
+@media (max-width: 768px) {
+    .vich-image img, 
+    .vich-file img, 
+    .admin-form img, 
+    .card-body .form-group img {
+        max-height: 300px;
+        margin-top: 10px;
+    }
+}

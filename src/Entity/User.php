@@ -8,35 +8,52 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Entité représentant un utilisateur du système.
+ * Implémente UserInterface pour l'intégration avec le système de sécurité de Symfony,
+ * et PasswordAuthenticatedUserInterface pour la gestion du mot de passe haché.
+ */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    /**
+     * @var int|null Identifiant unique de l'utilisateur
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * @var string|null Adresse email de l'utilisateur (utilisée comme identifiant de connexion)
+     */
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
     /**
-     * @var list<string> The user roles
+     * @var list<string> Les rôles attribués à l'utilisateur (ex: ROLE_USER, ROLE_ADMIN)
      */
     #[ORM\Column]
     private array $roles = [];
 
     /**
-     * @var string The hashed password
+     * @var string|null Le mot de passe haché de l'utilisateur
      */
     #[ORM\Column]
     private ?string $password = null;
 
+    /**
+     * @var string|null Nom de famille de l'utilisateur
+     */
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    /**
+     * @var string|null Prénom de l'utilisateur
+     */
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
