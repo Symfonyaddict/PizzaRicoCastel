@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\HeroRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -62,7 +63,7 @@ class Hero
     /**
      * @var DateTimeImmutable|null Date de dernière mise à jour, requise par VichUploader pour forcer la mise à jour de l'entité lors d'un changement de fichier
      */
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int

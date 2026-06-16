@@ -88,10 +88,9 @@ final class AdminPizzaController extends AbstractController
         // Recherche de la pizza correspondant au slug fourni
         $pizza = $pizzaRepo->findOneBy(['slug' => $slug]);
         
-        // Code commenté : gestion de l'erreur si la pizza n'existe pas
-        // if (!$pizza) {
-        //     throw $this->createNotFoundException('La pizza demandée n\'existe pas');
-        // }
+        if (!$pizza) {
+            throw $this->createNotFoundException('La pizza demandée n\'existe pas');
+        }
         
         // Création du formulaire pré-rempli avec les données de la pizza trouvée
         $form = $this->createForm(PizzaType::class, $pizza);

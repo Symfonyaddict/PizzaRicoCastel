@@ -1,20 +1,111 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block title %}Hello AdminBoissonController!{% endblock %}
+{% block title %}{{ title|default('Gestion des Boissons') }}{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/forma/Desktop/COURSSYMFONYLAURY/Rico/src/Controller/AdminBoissonController.php</code></li>
-        <li>Your template at <code>C:/Users/forma/Desktop/COURSSYMFONYLAURY/Rico/templates/admin_boisson/index.html.twig</code></li>
-    </ul>
+<!-- Delete Boisson Modal -->
+<div class="modal fade" id="deleteBoissonModal" tabindex="-1" aria-labelledby="deleteBoissonModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteBoissonModalLabel">Confirmation de suppression</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Êtes-vous sûr de vouloir supprimer cette boisson ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>Annuler</button>
+        <a href="#" id="confirmDeleteBtn" class="btn-admin btn-admin-danger"><i class="bi bi-trash me-1"></i>Supprimer</a>
+      </div>
+    </div>
+  </div>
 </div>
+
+<div class="admin-layout">
+    <!-- Sidebar Admin -->
+    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+    
+    <!-- Main Content -->
+    <div class="admin-content" id="adminContent">
+        <!-- Main Content Area -->
+        <div class="admin-main-content p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">{{ title|default('Gestion des Boissons') }}</h1>
+                <a href="{{ path('app_admin_boisson_create') }}" class="btn-admin btn-admin-primary"><i class="bi bi-plus-circle me-2"></i>Ajouter une boisson</a>
+            </div>
+            
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle me-2"></i> {{ message }}
+                </div>
+            {% endfor %}
+
+            <!-- Boissons List -->
+            <div class="card shadow-sm">
+                <div class="card-header py-3">
+                    <h5 class="mb-0 fw-bold">Boissons</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="admin-table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th width="100">Image</th>
+                                    <th>Nom</th>
+                                    <th>Prix</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for boisson in boissons %}
+                                <tr>
+                                    <td>
+                                        <div class="pizza-thumbnail"> {# Réutilisation de la classe existante pour la cohérence #}
+                                            {% if boisson.image %}
+                                                <img src="{{ asset('images/boissons/' ~ boisson.image) }}" alt="{{ boisson.name }}">
+                                            {% else %}
+                                                <div class="placeholder-image"><i class="bi bi-cup-straw"></i></div>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td>{{ boisson.name }}</td>
+                                    <td>{{ boisson.price|number_format(2, ',', '') }}€</td>
+                                    <td>
+                                        <div class="d-flex gap-1">
+                                            <a href="{{ path('app_admin_boisson_edit', {'slug': boisson.slug}) }}" class="btn-admin btn-admin-success btn-sm"><i class="bi bi-pencil"></i></a>
+                                            <button type="button" class="btn-admin btn-admin-danger btn-sm delete-boisson" data-bs-toggle="modal" data-bs-target="#deleteBoissonModal" data-delete-url="{{ path('app_admin_boisson_delete', {'id': boisson.id}) }}"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-4">Aucune boisson trouvée.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteButtons = document.querySelectorAll('.delete-boisson');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const deleteUrl = this.getAttribute('data-delete-url');
+                confirmDeleteBtn.setAttribute('href', deleteUrl);
+            });
+        });
+    });
+</script>
 {% endblock %}
