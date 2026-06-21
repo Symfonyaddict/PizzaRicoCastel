@@ -16,11 +16,12 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ 'app_boissons'|is_active_route }}" aria-current="{{ 'app_boissons'|is_active_route ? 'page' : '' }}" href="{{ path('app_boissons') }}">Nos boissons</a>
-                            </li class="nav-item">
-                                <a class="nav-link" href="#">À propos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Actualités</a>
+                                <a class="nav-link {{ 'app_about'|is_active_route }}" aria-current="{{ 'app_about'|is_active_route ? 'page' : '' }}" href="{{ path('app_about') }}">À propos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ 'app_news'|is_active_route or 'app_news_detail'|is_active_route }}" aria-current="{{ 'app_news'|is_active_route ? 'page' : '' }}" href="{{ path('app_news') }}">Actualités</a>
                             </li>
                             {% if app.user %}
                             <li class="nav-item">

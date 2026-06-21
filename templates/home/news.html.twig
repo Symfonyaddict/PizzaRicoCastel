@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ seo.metaTitle|default(title) }}{% endblock %}
+{% block meta_description %}{{ seo.metaDescription|default('') }}{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="display-4 fw-bold mb-5 text-white text-center">Nos Actualités</h1>
+    
+    <div class="row">
+        {% for item in news %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 bg-dark text-white border-secondary shadow-sm">
+                    {% if item.image %}
+                        <img src="{{ asset('images/news/' ~ item.image) }}" class="card-img-top" alt="{{ item.title }}" style="height: 220px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <div class="mb-2">
+                            <span class="badge bg-primary-subtle text-primary rounded-pill px-3">Actu</span>
+                            <small class="text-white-50 ms-2">{{ item.createdAt|date('d/m/Y') }}</small>
+                        </div>
+                        <h5 class="card-title fw-bold mt-2">{{ item.title }}</h5>
+                        <p class="card-text text-white-50 flex-grow-1">{{ item.content|slice(0, 120) ~ '...' }}</p>
+                        <a href="{{ path('app_news_detail', {'slug': item.slug}) }}" class="btn btn-link text-primary p-0 mt-3 text-decoration-none fw-bold">
+                            Lire la suite <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <p class="lead text-white-50">Aucune actualité pour le moment.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

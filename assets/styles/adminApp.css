@@ -39,51 +39,52 @@
 }
 
 :root {
-    /* Couleurs principales adaptées du thème principal */
-    --admin-primary: var(--primary, #f86c00be);      /* Rouge tomate plus doux */
-    --admin-primary-dark: #d45a00; /* Version plus foncée du rouge tomate */
-    --admin-secondary: var(--secondary, #f8b400);   /* Jaune/orange */
-    --admin-secondary-dark: #d49a00; /* Version plus foncée du jaune/orange */
-    --admin-success: var(--accent, #2e7d32);     /* Vert basilic */
-    --admin-success-dark: #1b5e20; /* Version plus foncée du vert */
-    --admin-danger: #e74c3c;      /* Rouge */
-    --admin-danger-dark: #c0392b; /* Rouge foncé */
-    --admin-warning: #f39c12;     /* Orange */
-    --admin-warning-dark: #d35400; /* Orange foncé */
-    --admin-info: #1abc9c;        /* Turquoise */
-    --admin-info-dark: #16a085;   /* Turquoise foncé */
-    --admin-light: var(--light, #f5f5f5);       /* Blanc cassé */
-    --admin-dark: var(--dark, #292929);        /* Presque noir */
-    --admin-gray: #95a5a6;        /* Gris */
-    --admin-border-color: rgba(0, 0, 0, 0.1); /* Couleur de bordure */
+    /* Couleurs principales unifiées avec le thème principal */
+    --admin-primary: #f86c00be;      
+    --admin-primary-dark: #d45a00; 
+    --admin-secondary: #f8b400;   
+    --admin-secondary-dark: #d49a00; 
+    --admin-success: #2e7d32;     
+    --admin-success-dark: #1b5e20; 
+    --admin-danger: #e74c3c;      
+    --admin-danger-dark: #c0392b; 
+    --admin-warning: #f39c12;     
+    --admin-warning-dark: #d35400; 
+    --admin-info: #1abc9c;        
+    --admin-info-dark: #16a085;   
+    --admin-light: #f5f5f5;       
+    --admin-dark: #1a1d21;        /* Unifié avec dark-surface du front */
+    --admin-dark-bg: #0f1113;     /* Unifié avec dark-bg du front */
+    --admin-gray: #95a5a6;        
+    --admin-border-color: rgba(255, 255, 255, 0.1);
     
     /* Dimensions */
-    --admin-sidebar-width: 250px; /* Largeur de la sidebar */
-    --admin-header-height: 60px;  /* Hauteur du header */
-    --admin-footer-height: 60px;  /* Hauteur du footer */
+    --admin-sidebar-width: 250px; 
+    --admin-header-height: 60px;  
+    --admin-footer-height: 60px;  
     
-    /* Ombres et transitions */
-    --admin-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Ombres et transitions unifiées */
+    --admin-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     --admin-transition: all 0.3s ease;
     
-    /* Arrondis */
-    --admin-border-radius: 0.5rem;
+    /* Arrondis unifiés */
+    --admin-border-radius: 0.75rem;
     --admin-border-radius-sm: 0.25rem;
-    --admin-border-radius-lg: 1rem;
+    --admin-border-radius-lg: 1.25rem;
 }
 
 /* Styles généraux pour l'administration */
 .admin-body {
-    background-color: var(--admin-light);
+    background-color: var(--admin-dark-bg);
     font-family: 'Montserrat', sans-serif;
-    color: var(--admin-dark);
+    color: #e0e0e0;
 }
 
 /* Layout principal pour l'administration */
 .admin-layout {
     display: flex;
     min-height: 100vh;
-    background-color: var(--dark-bg, #1a1a1a);
+    background-color: var(--admin-dark-bg);
     position: relative;
 }
 
@@ -396,9 +397,11 @@
 
 /* Style pour les cartes Bootstrap */
 .card {
-    background-color: var(--dark-surface, #2d2d2d);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: var(--admin-box-shadow);
+    border-radius: var(--admin-border-radius);
+    border: 1px solid var(--admin-border-color) !important;
+    box-shadow: var(--admin-box-shadow) !important;
+    background-color: var(--admin-dark) !important;
+    overflow: hidden;
 }
 
 .admin-card-header {
@@ -412,9 +415,8 @@
 
 /* Style pour les en-têtes de carte Bootstrap */
 .card-header {
-    background-color: var(--dark-surface, #2d2d2d);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--text-light, #e0e0e0);
+    border-bottom: 1px solid var(--admin-border-color) !important;
+    background-color: rgba(255, 255, 255, 0.02) !important;
 }
 
 .admin-card-title {
@@ -2026,4 +2028,34 @@
         max-height: 300px;
         margin-top: 10px;
     }
+}
+
+/* --- News Edit Refactoring --- */
+.news-edit-main-container {
+    background-color: var(--admin-dark-bg);
+    color: var(--text-light);
+}
+
+.news-card-standard {
+    background-color: var(--admin-dark) !important;
+    border: 1px solid var(--admin-border-color) !important;
+    border-radius: var(--admin-border-radius) !important;
+    box-shadow: var(--admin-box-shadow) !important;
+}
+
+.news-input-standard {
+    background-color: white !important;
+    color: #333 !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.375rem !important;
+    padding: 0.75rem !important;
+}
+
+.news-input-standard:focus {
+    border-color: var(--admin-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25) !important;
+}
+
+.news-breadcrumb {
+    background-color: rgba(255, 255, 255, 0.05) !important;
 }

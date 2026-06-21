@@ -124,16 +124,20 @@ final class AdminPizzaController extends AbstractController
      * @param Pizza $pizza La pizza à supprimer (récupérée automatiquement par son ID)
      * @param EntityManagerInterface $em Gestionnaire d'entités pour la suppression
      */
-    #[Route('/admin/pizza/delete/{id}', name: 'app_admin_pizza_delete')]
-    public function delete(Pizza $pizza, EntityManagerInterface $em): Response
+    #[Route('/admin/pizza/delete/{id}', name: 'app_admin_pizza_delete', methods: ['POST'])]
+    public function delete(Request $request, Pizza $pizza, EntityManagerInterface $em): Response
     {
-        // Préparation de la suppression de l'entité
-        $em->remove($pizza);
-        // Exécution de la suppression
-        $em->flush();
-        
-        // Message de succès
-        $this->addFlash('success', 'La pizza a correctement été supprimée');
+        if ($this->isCsrfTokenValid('delete'.$pizza->getId(), $request->request->get('_token'))) {
+            // Préparation de la suppression de l'entité
+            $em->remove($pizza);
+            // Exécution de la suppression
+            $em->flush();
+            
+            // Message de succès
+            $this->addFlash('success', 'La pizza a correctement été supprimée');
+        } else {
+            $this->addFlash('error', 'Token de sécurité invalide');
+        }
         
         // Redirection vers la liste des pizzas
         return $this->redirectToRoute('app_admin_pizza');

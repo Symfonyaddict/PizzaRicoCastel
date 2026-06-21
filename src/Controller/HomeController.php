@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Repository\AboutRepository;
 use App\Repository\BoissonRepository;
 use App\Repository\HeroRepository;
+use App\Repository\NewsRepository;
 use App\Repository\PizzaRepository;
+use App\Repository\SEORepository;
+use App\Entity\News;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,63 +19,104 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     /**
-     * Affiche la page d'accueil avec les pizzas spéciales et le héros (bannière).
-     *
-     * @param PizzaRepository $pizzaRepo Pour récupérer les pizzas spéciales
-     * @param HeroRepository $heroRepo Pour récupérer les informations de la bannière
+     * Affiche la page d'accueil avec les pizzas spéciales, le héros, À propos et Actualités.
      */
     #[Route('/', name: 'app_home')]
-    public function index(PizzaRepository $pizzaRepo, HeroRepository $heroRepo): Response
-    {
-        // Récupère les pizzas marquées comme "spéciales", triées par prix croissant
+    public function index(
+        PizzaRepository $pizzaRepo, 
+        HeroRepository $heroRepo, 
+        AboutRepository $aboutRepo, 
+        NewsRepository $newsRepo,
+        SEORepository $seoRepo
+    ): Response {
         $specialPizzas = $pizzaRepo->findSpecialOrderByPriceAsc();
-
-        // Récupère la première entrée pour la section héros/bannière
         $hero = $heroRepo->findOneBy([], ['id' => 'ASC']);
+        $about = $aboutRepo->findOneBy([]);
+        $news = $newsRepo->findBy([], ['createdAt' => 'DESC'], 3);
+        $seo = $seoRepo->findOneBy(['pageName' => 'home']);
 
-        // Rendu de la vue Twig avec les données récupérées
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
             'specialPizzas' => $specialPizzas,
             'hero' => $hero,
+            'about' => $about,
+            'news' => $news,
+            'seo' => $seo,
         ]);
     }
 
     /**
      * Affiche la page listant toutes les pizzas disponibles.
-     *
-     * @param PizzaRepository $pizzaRepo Pour récupérer l'ensemble des pizzas
      */
     #[Route('/nos-pizzas', name: 'app_pizzas')]
-    public function pizzas(PizzaRepository $pizzaRepo): Response
+    public function pizzas(PizzaRepository $pizzaRepo, SEORepository $seoRepo): Response
     {
-        // Récupère toutes les pizzas de la base de données, triées par prix croissant
         $pizzas = $pizzaRepo->findAllOrderByPriceAsc();
+        $seo = $seoRepo->findOneBy(['pageName' => 'pizzas']);
 
-        // Rendu de la vue Twig listant les pizzas
         return $this->render('home/pizzas.html.twig', [
-            'controller_name' => 'HomeController',
             'pizzas' => $pizzas,
-            'title' => 'Nos Pizzas - Pizza Rico'
+            'title' => 'Nos Pizzas - Pizza Rico',
+            'seo' => $seo,
         ]);
     }
 
     /**
      * Affiche la page listant toutes les boissons disponibles.
-     *
-     * @param BoissonRepository $boissonRepo Pour récupérer l'ensemble des boissons
      */
     #[Route('/nos-boissons', name: 'app_boissons')]
-    public function boissons(BoissonRepository $boissonRepo): Response
+    public function boissons(BoissonRepository $boissonRepo, SEORepository $seoRepo): Response
     {
-        // Récupère toutes les boissons de la base de données, triées par prix croissant
         $boissons = $boissonRepo->findAllOrderByPriceAsc();
+        $seo = $seoRepo->findOneBy(['pageName' => 'boissons']);
 
-        // Rendu de la vue Twig listant les boissons
         return $this->render('home/boissons.html.twig', [
-            'controller_name' => 'HomeController',
             'boissons' => $boissons,
-            'title' => 'Nos Boissons - Pizza Rico'
+            'title' => 'Nos Boissons - Pizza Rico',
+            'seo' => $seo,
+        ]);
+    }
+
+    /**
+     * Affiche le détail d'une actualité.
+     */
+    #[Route('/actualite/{slug}', name: 'app_news_detail')]
+    public function newsDetail(News $news): Response
+    {
+        return $this->render('home/news_detail.html.twig', [
+            'item' => $news,
+            'title' => $news->getTitle() . ' - Pizza Rico'
+        ]);
+    }
+
+    /**
+     * Affiche la page "À propos" complète.
+     */
+    #[Route('/a-propos', name: 'app_about')]
+    public function about(AboutRepository $aboutRepo, SEORepository $seoRepo): Response
+    {
+        $about = $aboutRepo->findOneBy([]);
+        $seo = $seoRepo->findOneBy(['pageName' => 'about']);
+
+        return $this->render('home/about.html.twig', [
+            'about' => $about,
+            'title' => 'À Propos de nous - Pizza Rico',
+            'seo' => $seo,
+        ]);
+    }
+
+    /**
+     * Affiche la liste de toutes les actualités.
+     */
+    #[Route('/actualites', name: 'app_news')]
+    public function news(NewsRepository $newsRepo, SEORepository $seoRepo): Response
+    {
+        $news = $newsRepo->findBy([], ['createdAt' => 'DESC']);
+        $seo = $seoRepo->findOneBy(['pageName' => 'news']);
+
+        return $this->render('home/news.html.twig', [
+            'news' => $news,
+            'title' => 'Nos Actualités - Pizza Rico',
+            'seo' => $seo,
         ]);
     }
 }

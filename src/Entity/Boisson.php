@@ -46,7 +46,22 @@ class Boisson
     #[ORM\Column]
     #[Assert\NotBlank(message: "Le prix ne peut pas être vide")]
     #[Assert\Positive(message: "Le prix doit être positif")]
+    #[Assert\Range(min: 0.5, max: 100, notInRangeMessage: "Le prix doit être compris entre {{ min }}€ et {{ max }}€")]
     private ?float $price = null;
+
+    /**
+     * @var string|null Catégorie de la boisson (ex: Soda, Vin, Bière)
+     */
+    #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Length(max: 50)]
+    private ?string $category = null;
+
+    /**
+     * @var string|null Contenance de la boisson (ex: 33cl, 75cl, 1.5L)
+     */
+    #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\Length(max: 20)]
+    private ?string $capacity = null;
 
     /**
      * @var string|null Nom du fichier image stocké en base de données
@@ -108,6 +123,30 @@ class Boisson
     public function setPrice(float $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?string $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getCapacity(): ?string
+    {
+        return $this->capacity;
+    }
+
+    public function setCapacity(?string $capacity): static
+    {
+        $this->capacity = $capacity;
 
         return $this;
     }

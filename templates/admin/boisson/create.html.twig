@@ -23,8 +23,8 @@
             </nav>
             
             <div class="row">
-                <div class="col-12 col-md-8 col-lg-6">
-                    <div class="card shadow-sm">
+                <div class="col-12 col-md-6">
+                    <div class="card shadow-sm h-100">
                         <div class="card-header py-3">
                             <h5 class="mb-0 fw-bold">Détails de la boisson</h5>
                         </div>
@@ -34,6 +34,19 @@
                                     {{ form_label(form.name, 'Nom de la boisson', {'label_attr': {'class': 'form-label'}}) }}
                                     {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
                                     {{ form_errors(form.name) }}
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.category, 'Catégorie', {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.category, {'attr': {'class': 'form-select'}}) }}
+                                        {{ form_errors(form.category) }}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.capacity, 'Contenance', {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.capacity, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_errors(form.capacity) }}
+                                    </div>
                                 </div>
                                 
                                 <div class="mb-3">
@@ -56,6 +69,43 @@
                                     <button type="submit" class="btn-admin btn-admin-primary"><i class="bi bi-check-circle me-2"></i>Enregistrer</button>
                                 </div>
                             {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colonne d'informations à droite -->
+                <div class="col-12 col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header py-3">
+                            <h5 class="mb-0 fw-bold">Aide et informations</h5>
+                        </div>
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="alert alert-info mb-4">
+                                <i class="bi bi-info-circle me-2"></i> Vous êtes en train d'ajouter une nouvelle boisson à votre carte.
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h6 class="fw-bold"><i class="bi bi-info-circle-fill text-primary me-2"></i>Catégories</h6>
+                                <p>Classez vos boissons (Sodas, Vins, Bières, etc.) pour aider vos clients à mieux s'orienter dans le menu.</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h6 class="fw-bold"><i class="bi bi-water text-info me-2"></i>Contenance</h6>
+                                <p>Précisez le volume servi (ex: 33cl, 50cl, 75cl, 1.5L). Cette information sera affichée à côté du nom de la boisson.</p>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6 class="fw-bold"><i class="bi bi-lightbulb-fill text-warning me-2"></i>Conseils photo</h6>
+                                <p>Une belle photo de la bouteille ou d'un verre servi augmente l'attractivité du produit.</p>
+                                <ul>
+                                    <li>Format recommandé : JPEG, PNG ou WebP</li>
+                                    <li>Taille maximale : 2 Mo</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="alert alert-info mt-auto">
+                                <i class="bi bi-question-circle me-2"></i>Besoin d'aide supplémentaire ? Contactez l'administrateur système.
+                            </div>
                         </div>
                     </div>
                 </div>

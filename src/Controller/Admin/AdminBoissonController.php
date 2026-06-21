@@ -86,13 +86,18 @@ final class AdminBoissonController extends AbstractController
     /**
      * Gère la suppression d'une boisson.
      */
-    #[Route('/admin/boisson/delete/{id}', name: 'app_admin_boisson_delete', methods: ['POST', 'DELETE', 'GET'])]
-    public function delete(Boisson $boisson, EntityManagerInterface $em): Response
+    #[Route('/admin/boisson/delete/{id}', name: 'app_admin_boisson_delete', methods: ['POST'])]
+    public function delete(Request $request, Boisson $boisson, EntityManagerInterface $em): Response
     {
-        $em->remove($boisson);
-        $em->flush();
-        
-        $this->addFlash('success', 'La boisson a été supprimée avec succès');
+        if ($this->isCsrfTokenValid('delete'.$boisson->getId(), $request->request->get('_token'))) {
+            $em->remove($boisson);
+            $em->flush();
+            
+            $this->addFlash('success', 'La boisson a été supprimée avec succès');
+        } else {
+            $this->addFlash('error', 'Token de sécurité invalide');
+        }
+
         return $this->redirectToRoute('app_admin_boisson');
     }
 }

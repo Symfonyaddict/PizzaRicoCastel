@@ -37,8 +37,16 @@
                                     <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38" class="card-img-top" alt="{{ boisson.name }}">
                                 {% endif %}
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title">{{ boisson.name }}</h5>
-                                    <div class="mb-2">
+                                    {% if boisson.category %}
+                                        <span class="badge bg-primary align-self-start mb-2">{{ boisson.category }}</span>
+                                    {% endif %}
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h5 class="card-title mb-0">{{ boisson.name }}</h5>
+                                        {% if boisson.capacity %}
+                                            <span class="text-muted small fw-bold">{{ boisson.capacity }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="mt-auto">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <span class="text-muted small">PRIX</span>
                                             <span class="dotted-line flex-grow-1 mx-2"></span>

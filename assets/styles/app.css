@@ -1,14 +1,20 @@
 /* Variables */
 :root {
     --primary: #f86c00be;     /* Rouge tomate plus doux */
+    --primary-rgb: 248, 108, 0;
     --secondary: #f8b400;   /* Jaune/orange */
     --accent: #2e7d32;      /* Vert basilic */
     --dark: #292929;        /* Presque noir */
     --light: #f5f5f5;       /* Blanc cassé */
     --crust: #d4a76a;       /* Couleur croûte */
-    --dark-bg: #1a1a1a;     /* Fond très sombre */
-    --dark-surface: #2d2d2d; /* Surface sombre pour les cartes */
+    --dark-bg: #0f1113;     /* Fond très sombre (unifié avec admin) */
+    --dark-surface: #1a1d21; /* Surface sombre pour les cartes (unifié avec admin) */
     --text-light: #e0e0e0;   /* Texte clair pour fond sombre */
+    --border-color: rgba(255, 255, 255, 0.1);
+    --radius-md: 0.75rem;
+    --radius-lg: 1.25rem;
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* Bouton retour en haut */
@@ -396,11 +402,11 @@ body {
 
 /* Cartes de menu */
 .menu-card {
-    border-radius: 15px;
+    border-radius: var(--radius-md);
     overflow: hidden;
     transition: all 0.3s;
-    border: none;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -408,8 +414,9 @@ body {
 }
 
 .menu-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
 }
 
 .menu-card img {
@@ -672,4 +679,62 @@ footer .row {
     height: 100%;
     border-radius: 0 0.25rem 0.25rem 0;
     min-height: 100%;
+}
+
+/* Footer Rico Style */
+.rico-footer {
+    background-color: var(--dark-bg);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    letter-spacing: 0.05em;
+}
+
+.footer-nav-link {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+}
+
+.footer-nav-link:hover {
+    opacity: 1;
+    color: var(--primary);
+}
+
+.footer-secondary-link {
+    color: var(--text-light);
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.footer-secondary-link:hover {
+    opacity: 1;
+}
+
+.smaller-footer-text {
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.social-icon-btn {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--dark-surface);
+    color: var(--text-light);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.social-icon-btn:hover {
+    background-color: var(--primary);
+    color: white;
+    transform: translateY(-3px);
+    border-color: var(--primary);
 }

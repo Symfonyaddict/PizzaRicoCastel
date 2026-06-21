@@ -1,0 +1,42 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+<div class="admin-layout">
+    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+    
+    <div class="admin-content" id="adminContent">
+        <div class="admin-main-content p-4">
+            <h1 class="mb-4">{{ title }}</h1>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="admin-table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Page</th>
+                                    <th>Meta Title</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in seos %}
+                                <tr>
+                                    <td>{{ item.pageName }}</td>
+                                    <td>{{ item.metaTitle }}</td>
+                                    <td>
+                                        <a href="{{ path('app_admin_seo_edit', {'id': item.id}) }}" class="btn-admin btn-admin-success btn-sm"><i class="bi bi-pencil"></i> Modifier</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

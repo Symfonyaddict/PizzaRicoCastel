@@ -20,7 +20,10 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>Annuler</button>
-        <a href="#" id="confirmDeleteBtn" class="btn-admin btn-admin-danger" data-delete-url="{{ path('app_admin_pizza_delete', {'id': 'PIZZA_ID'}) }}"><i class="bi bi-trash me-1"></i>Supprimer</a>
+        <form id="deleteForm" method="post" action="">
+            <input type="hidden" name="_token" value="" id="deleteToken">
+            <button type="submit" class="btn-admin btn-admin-danger"><i class="bi bi-trash me-1"></i>Supprimer</button>
+        </form>
       </div>
     </div>
   </div>
@@ -36,7 +39,13 @@
         <div class="admin-main-content p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="mb-0">{{ title|default('Gestion des Pizzas') }}</h1>
-                <a href="{{ path('app_admin_pizza_create') }}" class="btn-admin btn-admin-primary"><i class="bi bi-plus-circle me-2"></i>Ajouter une pizza</a>
+                <div class="d-flex gap-2">
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary text-white"><i class="bi bi-search"></i></span>
+                        <input type="text" id="adminSearch" class="form-control bg-dark text-white border-secondary" placeholder="Rechercher une pizza...">
+                    </div>
+                    <a href="{{ path('app_admin_pizza_create') }}" class="btn-admin btn-admin-primary text-nowrap"><i class="bi bi-plus-circle me-2"></i>Ajouter une pizza</a>
+                </div>
             </div>
             
             <!-- Pizzas List -->
@@ -86,7 +95,14 @@
                                     <td>
                                         <div class="d-flex gap-1">
                                             <a href="{{ path('app_admin_pizza_edit', {'slug': pizza.slug}) }}" class="btn-admin btn-admin-success btn-sm"><i class="bi bi-pencil"></i></a>
-                                            <button type="button" class="btn-admin btn-admin-danger btn-sm delete-pizza" data-bs-toggle="modal" data-bs-target="#deletePizzaModal" data-pizza-id="{{ pizza.id }}"><i class="bi bi-trash"></i></button>
+                                            <button type="button" class="btn-admin btn-admin-danger btn-sm delete-pizza" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deletePizzaModal" 
+                                                data-pizza-id="{{ pizza.id }}"
+                                                data-delete-url="{{ path('app_admin_pizza_delete', {'id': pizza.id}) }}"
+                                                data-token="{{ csrf_token('delete' ~ pizza.id) }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -107,13 +123,28 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Handle delete pizza modal
         const deletePizzaButtons = document.querySelectorAll('.delete-pizza');
-        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const deleteForm = document.getElementById('deleteForm');
+        const deleteToken = document.getElementById('deleteToken');
         
         deletePizzaButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const pizzaId = this.getAttribute('data-pizza-id');
-                const deleteUrl = confirmDeleteBtn.getAttribute('data-delete-url');
-                confirmDeleteBtn.setAttribute('href', deleteUrl.replace('PIZZA_ID', pizzaId));
+                const deleteUrl = this.getAttribute('data-delete-url');
+                const token = this.getAttribute('data-token');
+                
+                deleteForm.setAttribute('action', deleteUrl);
+                deleteToken.setAttribute('value', token);
+            });
+        });
+
+        // Live Search
+        const searchInput = document.getElementById('adminSearch');
+        const tableRows = document.querySelectorAll('.admin-table tbody tr');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            tableRows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
             });
         });
     });

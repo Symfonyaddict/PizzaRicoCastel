@@ -73,12 +73,18 @@ class Pizza
      * @var float|null Prix de la pizza en taille moyenne
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Le prix ne peut pas être vide")]
+    #[Assert\Positive(message: "Le prix doit être positif")]
+    #[Assert\Range(min: 5, max: 50, notInRangeMessage: "Le prix doit être compris entre {{ min }}€ et {{ max }}€")]
     private ?float $priceMedium = null;
 
     /**
      * @var float|null Prix de la pizza en taille grande
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Le prix ne peut pas être vide")]
+    #[Assert\Positive(message: "Le prix doit être positif")]
+    #[Assert\Range(min: 7, max: 60, notInRangeMessage: "Le prix doit être compris entre {{ min }}€ et {{ max }}€")]
     private ?float $priceLarge = null;
 
     /**

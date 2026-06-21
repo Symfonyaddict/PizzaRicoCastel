@@ -26,6 +26,18 @@
             <i class="bi bi-image"></i>
             <span>Gérer les Sections Hero</span>
         </a>
+        <a href="{{ path('app_admin_about') }}" class="nav-link {{ 'app_admin_about'|is_active_route }}">
+            <i class="bi bi-info-circle"></i>
+            <span>À Propos</span>
+        </a>
+        <a href="{{ path('app_admin_news') }}" class="nav-link {{ 'app_admin_news'|is_active_route }}">
+            <i class="bi bi-newspaper"></i>
+            <span>Actualités</span>
+        </a>
+        <a href="{{ path('app_admin_seo') }}" class="nav-link {{ 'app_admin_seo'|is_active_route }}">
+            <i class="bi bi-search"></i>
+            <span>SEO</span>
+        </a>
         <a href="{{ path('app_admin_user') }}" class="nav-link {{ 'app_admin_user'|is_active_route }}">
             <i class="bi bi-people"></i>
             <span>Gérer les Utilisateurs</span>

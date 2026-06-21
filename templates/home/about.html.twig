@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ seo.metaTitle|default(title) }}{% endblock %}
+{% block meta_description %}{{ seo.metaDescription|default('') }}{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row align-items-center g-5 mb-5">
+        <div class="col-lg-6">
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5" alt="Notre pizzeria" class="img-fluid rounded-4 shadow-lg">
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-4 text-white">{{ about.title|default('Notre Histoire') }}</h1>
+            <div class="text-white-50 lead mb-4">
+                {% if about %}
+                    {{ about.content|nl2br }}
+                {% else %}
+                    <p>Fondée en 2005 par la famille Rico, notre pizzeria s'est donnée pour mission de faire découvrir les saveurs authentiques de l'Italie à Paris.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
