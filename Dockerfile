@@ -30,27 +30,26 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copie des fichiers de dépendances en premier
+# Copie des fichiers de dépendances
 COPY composer.json composer.lock ./
 
-# Installation des dépendances sans lancer les scripts (pour éviter les erreurs de DB)
+# Installation des dépendances sans scripts et sans autoloader définitif
 ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer install --no-dev --no-scripts --no-autoloader
 
 # Copie du reste du projet
 COPY . .
 
-# Compilation des assets (AssetMapper)
-RUN php bin/console asset-map:compile --env=prod
+# Génération de l'autoloader et exécution des scripts post-install
+RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
 
-# Permissions
+# Création des dossiers nécessaires et permissions
 RUN mkdir -p var/cache var/log public/images && \
     chown -R www-data:www-data var public/images
 
-# Gestion du script d'entrée (et correction des fins de ligne Windows si besoin)
+# Gestion du script d'entrée
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh && \
-    chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 EXPOSE 80
