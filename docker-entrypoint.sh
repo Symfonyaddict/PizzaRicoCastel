@@ -12,8 +12,11 @@ echo "🎨 Compilation des assets..."
 php bin/console asset-map:compile --env=prod --no-interaction
 
 echo "🗄️ Mise à jour du schéma de la base de données (Direct)..."
-# On utilise schema:update --force car les fichiers de migrations sont incompatibles avec PostgreSQL
 php bin/console doctrine:schema:update --force --no-interaction
+
+echo "📁 Correction des permissions..."
+# On s'assure que l'utilisateur www-data (Apache) peut écrire dans var/ et public/images/
+chown -R www-data:www-data var public/images
 
 echo "🚀 Lancement d'Apache..."
 exec apache2-foreground
