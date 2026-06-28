@@ -5,110 +5,84 @@
 {% block body %}
 <!-- Delete User Modal -->
 <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg">
-      <div class="modal-header border-bottom-0 pt-4 px-4">
-        <h5 class="modal-title fw-bold" id="deleteUserModalLabel">Supprimer cet utilisateur ?</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteUserModalLabel">Confirmation de suppression</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body px-4 py-3">
-        <p class="text-muted">Cette action supprimera définitivement le compte de l'utilisateur. Êtes-vous sûr ?</p>
+      <div class="modal-body">
+        Êtes-vous sûr de vouloir supprimer cet utilisateur ?
       </div>
-      <div class="modal-footer border-top-0 pb-4 px-4">
-        <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal">Annuler</button>
-        <a href="#" id="confirmDeleteBtn" class="btn-admin btn-admin-danger">Supprimer</a>
+      <div class="modal-footer">
+        <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>Annuler</button>
+        <a href="#" id="confirmDeleteBtn" class="btn-admin btn-admin-danger" data-delete-url="{{ path('app_admin_user_delete', {'id': 'USER_ID'}) }}"><i class="bi bi-trash me-1"></i>Supprimer</a>
       </div>
     </div>
   </div>
 </div>
-
-<div class="admin-main-content">
-    <div class="d-flex justify-content-between align-items-center page-title-box">
-        <div>
-            <h1 class="mb-1">{{ title }}</h1>
-            <p class="text-muted mb-0">Liste des membres et administrateurs de la plateforme.</p>
-        </div>
-        <a href="{{ path('app_register') }}" class="btn-admin btn-admin-primary">
-            <i class="bi bi-plus-lg"></i>
-            <span>Ajouter un utilisateur</span>
-        </a>
-    </div>
+<div class="admin-layout">
+    <!-- Sidebar Admin -->
+    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
     
-    <div class="card">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Utilisateur</th>
-                            <th>Email</th>
-                            <th>Rôles</th>
-                            <th class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for users in user %}
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="stats-icon rounded-circle" style="width: 40px; height: 40px; font-size: 0.9rem; background: var(--admin-surface-light);">
-                                        {{ users.firstname|first|upper }}{{ users.name|first|upper }}
-                                    </div>
-                                    <span class="fw-bold">{{ users.firstname }} {{ users.name }}</span>
-                                </div>
-                            </td>
-                            <td class="text-muted">{{ users.email }}</td>
-                            <td>
-                                <div class="d-flex gap-2">
-                                    {% for role in users.roles %}
-                                        {% if role != 'ROLE_USER' %}
+    <!-- Main Content -->
+    <div class="admin-content" id="adminContent">
+        
+        <!-- Main Content Area -->
+        <div class="admin-main-content p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">{{ title }}</h1>
+                <a href="{{ path('app_register') }}" class="btn-admin btn-admin-primary"><i class="bi bi-plus-circle me-2"></i>Ajouter un utilisateur</a>
+            </div>
+            
+            <!-- Users List -->
+            <div class="card shadow-sm">
+                <div class="card-header py-3">
+                    <h5 class="mb-0 fw-bold">Utilisateurs</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="admin-table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th width="100">Avatar</th>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th class="d-none d-md-table-cell">Rôle</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for users in user %}
+                                <tr>
+                                    <td>
+                                        <div class="avatar-circle">
+                                            <span class="initials">{{ users.firstname|first }}{{ users.name|first }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ users.firstname }} {{ users.name }}</td>
+                                    <td>{{ users.email }}</td>
+                                    <td class="d-none d-md-table-cell">
+                                        {% for role in users.roles %}
                                             <span class="badge-status {% if role == 'ROLE_ADMIN' %}badge-processing{% else %}badge-pending{% endif %}">
-                                                {% if role == 'ROLE_ADMIN' %}Administrateur{% else %}{{ role }}{% endif %}
+                                                {% if role == 'ROLE_ADMIN' %}Administrateur{% else %}Utilisateur{% endif %}
                                             </span>
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% if users.roles|length == 1 and users.roles[0] == 'ROLE_USER' %}
-                                        <span class="badge-status badge-pending">Client</span>
-                                    {% endif %}
-                                </div>
-                            </td>
-                            <td class="text-end">
-                                <div class="d-flex gap-2 justify-content-end">
-                                    <a href="{{ path('app_admin_user_edit', {'id': users.id}) }}" class="btn-admin btn-admin-secondary btn-sm" title="Modifier">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <button type="button" class="btn-admin btn-admin-danger btn-sm delete-user" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#deleteUserModal" 
-                                        data-user-id="{{ users.id }}"
-                                        data-delete-url="{{ path('app_admin_user_delete', {'id': users.id}) }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-1">
+                                            <a href="{{ path('app_admin_user_edit', {'id': users.id}) }}" class="btn-admin btn-admin-success btn-sm"><i class="bi bi-pencil"></i></a>
+                                            <button type="button" class="btn-admin btn-admin-danger btn-sm delete-user" data-bs-toggle="modal" data-bs-target="#deleteUserModal" data-user-id="{{ users.id }}"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </div>  
 </div>
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const deleteButtons = document.querySelectorAll('.delete-user');
-        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const deleteUrl = this.getAttribute('data-delete-url');
-                confirmDeleteBtn.setAttribute('href', deleteUrl);
-            });
-        });
-    });
-</script>
 {% endblock %}

@@ -3,32 +3,48 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-<div class="admin-main-content">
-    <div class="d-flex justify-content-between align-items-center page-title-box">
-        <div>
-            <h1 class="mb-1">{{ title }}</h1>
-            <p class="text-muted mb-0">Rédigez un nouvel article pour tenir vos clients informés.</p>
-        </div>
-        <a href="{{ path('app_admin_news') }}" class="btn-admin btn-admin-secondary">
-            <i class="bi bi-arrow-left"></i>
-            <span>Retour à la liste</span>
-        </a>
-    </div>
+<div class="admin-layout">
+    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+    
+    <div class="admin-content" id="adminContent">
+        <div class="admin-main-content p-4">
+            <h1 class="mb-4">{{ title }}</h1>
+            
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb bg-dark p-3 rounded">
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin_dashboard') }}" class="text-decoration-none text-white">Tableau de bord</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin_news') }}" class="text-decoration-none text-white">Actualités</a></li>
+                    <li class="breadcrumb-item active text-white" aria-current="page">Ajouter</li>
+                </ol>
+            </nav>
 
-    <div class="row">
-        <div class="col-12 col-xl-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                    {{ form_start(form, {'attr': {'class': 'admin-form'}}) }}
-                        {{ form_widget(form) }}
-                        
-                        <div class="d-flex justify-content-end mt-5 pt-3 border-top border-light">
-                            <button type="submit" class="btn-admin btn-admin-primary px-5">
-                                <i class="bi bi-send-fill"></i>
-                                <span>Publier l'actualité</span>
-                            </button>
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+                            {{ form_start(form) }}
+                                <div class="mb-3">
+                                    {{ form_label(form.title) }}
+                                    {{ form_widget(form.title) }}
+                                    {{ form_errors(form.title) }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form_label(form.content) }}
+                                    {{ form_widget(form.content) }}
+                                    {{ form_errors(form.content) }}
+                                </div>
+                                <div class="mb-4">
+                                    {{ form_label(form.imageFile) }}
+                                    {{ form_widget(form.imageFile) }}
+                                    {{ form_errors(form.imageFile) }}
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <a href="{{ path('app_admin_news') }}" class="btn-admin btn-admin-secondary">Annuler</a>
+                                    <button type="submit" class="btn-admin btn-admin-primary">Publier l'actualité</button>
+                                </div>
+                            {{ form_end(form) }}
                         </div>
-                    {{ form_end(form) }}
+                    </div>
                 </div>
             </div>
         </div>

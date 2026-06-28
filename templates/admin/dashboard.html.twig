@@ -4,66 +4,61 @@
 {% block title %}Tableau de bord{% endblock %}
 
 {% block body %}
-<div class="admin-main-content">
-    <div class="page-title-box">
-        {% if app.user %}
-            <h1>Bienvenue, {{ app.user.firstname }}</h1>
-        {% else %}
-            <h1>Tableau de bord</h1>
-        {% endif %}
-        <p class="text-muted">Voici un aperçu de l'activité de Pizza Rico.</p>
-    </div>
+    <div class="admin-layout">
+        <!-- Sidebar Admin -->
+        {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+        
+        <!-- Main Content -->
+        <div class="admin-content" id="adminContent">
+            
+            <!-- Main Content Area -->
+            <div class="admin-main-content p-4">
+            {% if app.user %}
+                <h1 class="mb-4">Bienvenue sur ton tableau de bord {{ app.user.firstname }}</h1>
+            {% endif %}
 
-    <!-- Statistiques rapides -->
-    <div class="stats-grid">
-        <div class="stats-card">
-            <div class="stats-icon"><i class="bi bi-people"></i></div>
-            <div class="stats-info">
-                <div class="stats-title">Utilisateurs</div>
-                <div class="stats-value">{{ totalUsers }}</div>
-            </div>
-        </div>
-        
-        <div class="stats-card">
-            <div class="stats-icon"><i class="bi bi-pizza"></i></div>
-            <div class="stats-info">
-                <div class="stats-title">Pizzas</div>
-                <div class="stats-value">{{ totalPizzas }}</div>
-                <div class="small text-muted">{{ specialPizzas }} spéciales</div>
-            </div>
-        </div>
-        
-        <div class="stats-card">
-            <div class="stats-icon"><i class="bi bi-cup-straw"></i></div>
-            <div class="stats-info">
-                <div class="stats-title">Boissons</div>
-                <div class="stats-value">{{ totalBoissons }}</div>
-            </div>
-        </div>
-        
-        <div class="stats-card">
-            <div class="stats-icon"><i class="bi bi-tag"></i></div>
-            <div class="stats-info">
-                <div class="stats-title">Prix moyen Pizza</div>
-                <div class="stats-value">{{ avgPizzaPrice|number_format(2, ',', '') }}€</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4 d-flex align-items-center gap-3">
-                    <div class="stats-icon bg-info-subtle text-info rounded-circle" style="width: 40px; height: 40px; background: rgba(59, 130, 246, 0.1);">
-                        <i class="bi bi-info-circle"></i>
+                <!-- Statistiques rapides -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon bg-primary text-white"><i class="bi bi-people"></i></div>
+                            <div class="stats-title">Utilisateurs</div>
+                            <div class="stats-value">{{ totalUsers }}</div>
+                        </div>
                     </div>
-                    <div>
-                        <h6 class="mb-1 fw-bold">Besoin d'aide ?</h6>
-                        <p class="mb-0 text-muted small">Utilisez le menu latéral pour gérer les pizzas, boissons, actualités et le SEO de votre site.</p>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon bg-success text-white"><i class="bi bi-pizza"></i></div>
+                            <div class="stats-title">Pizzas</div>
+                            <div class="stats-value">{{ totalPizzas }}</div>
+                            <div class="stats-change text-muted small">{{ specialPizzas }} spéciales</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon bg-warning text-white"><i class="bi bi-cup-straw"></i></div>
+                            <div class="stats-title">Boissons</div>
+                            <div class="stats-value">{{ totalBoissons }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon bg-info text-white"><i class="bi bi-tag"></i></div>
+                            <div class="stats-title">Prix moyen Pizza</div>
+                            <div class="stats-value">{{ avgPizzaPrice|number_format(2, ',', '') }}€</div>
+                        </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i> Utilisez le menu latéral pour gérer les différentes sections de votre restaurant.
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

@@ -3,76 +3,169 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-<div class="admin-main-content">
-    <div class="d-flex justify-content-between align-items-center page-title-box">
-        <div>
-            <h1 class="mb-1">{{ title }}</h1>
-            <p class="text-muted mb-0">Gérez les accès et les informations personnelles des utilisateurs.</p>
-        </div>
-        <a href="{{ path('app_admin_user') }}" class="btn-admin btn-admin-secondary">
-            <i class="bi bi-arrow-left"></i>
-            <span>Retour à la liste</span>
-        </a>
-    </div>
-
-    <div class="row">
-        <div class="col-12 col-xl-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header">
-                    <h5 class="mb-0 fw-bold text-primary">Informations du compte</h5>
-                </div>
-                <div class="card-body p-4">
-                    {{ form_start(form, {'attr': {'class': 'admin-form'}}) }}
-                        <div class="row g-4">
-                            <div class="col-12">
-                                {{ form_row(form.email) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form_row(form.firstname) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form_row(form.name) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form_row(form.roles) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form_row(form.password) }}
-                                <div class="form-text text-muted">Laissez vide pour conserver le mot de passe actuel.</div>
-                            </div>
-                        </div>
-                        
-                        <div class="d-flex justify-content-end mt-5 pt-3 border-top border-light">
-                            <button type="submit" class="btn-admin btn-admin-success px-5">
-                                <i class="bi bi-check-lg"></i>
-                                <span>Enregistrer les modifications</span>
-                            </button>
-                        </div>
-                    {{ form_end(form) }}
-                </div>
-            </div>
-        </div>
+<div class="admin-layout">
+    <!-- Sidebar Admin -->
+    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+    
+    <!-- Main Content -->
+    <div class="admin-content" id="adminContent">
         
-        <div class="col-12 col-xl-4 mt-4 mt-xl-0">
-            <div class="card border-0 shadow-sm mb-4 bg-primary-soft">
-                <div class="card-body p-4 text-center">
-                    <div class="stats-icon mx-auto mb-3" style="width: 64px; height: 64px; font-size: 2rem;">
-                        <i class="bi bi-person-badge"></i>
-                    </div>
-                    <h5 class="fw-bold mb-1">{{ form.firstname.vars.value }} {{ form.name.vars.value }}</h5>
-                    <p class="text-muted small mb-0">{{ form.email.vars.value }}</p>
-                </div>
-            </div>
+        <!-- Main Content Area -->
+        <div class="admin-main-content p-4">
+            <h1 class="mb-4 text-white">{{ title }}</h1>
+            
+            <!-- Breadcrumb navigation -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb bg-dark p-3 rounded">
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin_dashboard') }}" class="text-decoration-none text-white"><i class="bi bi-house-door me-1"></i>Tableau de bord</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin_user') }}" class="text-decoration-none text-white"><i class="bi bi-people me-1"></i>Utilisateurs</a></li>
+                    <li class="breadcrumb-item active text-white" aria-current="page"><i class="bi bi-pencil me-1"></i>Édition utilisateur</li>
+                </ol>
+            </nav>
+            
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-bold">Informations de l'utilisateur</h5>
+                            <span class="badge bg-primary"><i class="bi bi-pencil me-1"></i> Mode édition</span>
+                        </div>
 
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <h6 class="fw-bold mb-3"><i class="bi bi-shield-lock me-2"></i>Rôles & Permissions</h6>
-                    <p class="text-muted small">
-                        Le rôle <strong>ROLE_ADMIN</strong> donne un accès complet à l'interface d'administration. 
-                        Le rôle <strong>ROLE_USER</strong> est le rôle par défaut pour les clients.
-                    </p>
-                    <div class="alert alert-warning small mb-0">
-                        <i class="bi bi-exclamation-triangle me-2"></i> Attention à ne pas vous retirer vos propres droits d'administration.
+                        <div class="card-body p-4 d-flex flex-column">
+                            {{ form_start(form, {'attr': {'class': 'needs-validation flex-grow-1 d-flex flex-column'}}) }}
+                                <div class="mb-3">
+                                    {{ form_label(form.email, 'Email <span class="text-danger">*</span>', {'label_attr': {'class': 'form-label'}, 'label_html': true}) }}
+                                    {{ form_widget(form.email, {'attr': {'class': 'form-control bg-dark text-white border-secondary', 'placeholder': 'exemple@domaine.com'}}) }}
+                                    <div class="form-text text-white"><i class="bi bi-envelope-at me-1"></i> L'adresse email servira d'identifiant de connexion</div>
+                                    {{ form_errors(form.email) }}
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        {{ form_label(form.firstname, 'Prénom <span class="text-danger">*</span>', {'label_attr': {'class': 'form-label'}, 'label_html': true}) }}
+                                        {{ form_widget(form.firstname, {'attr': {'class': 'form-control bg-dark text-white border-secondary', 'placeholder': 'Jean'}}) }}
+                                        <div class="form-text text-white"><i class="bi bi-person me-1"></i> Prénom de l'utilisateur</div>
+                                        {{ form_errors(form.firstname) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_label(form.name, 'Nom <span class="text-danger">*</span>', {'label_attr': {'class': 'form-label'}, 'label_html': true}) }}
+                                        {{ form_widget(form.name, {'attr': {'class': 'form-control bg-dark text-white border-secondary', 'placeholder': 'Dupont'}}) }}
+                                        <div class="form-text text-white"><i class="bi bi-person-vcard me-1"></i> Nom de famille de l'utilisateur</div>
+                                        {{ form_errors(form.name) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.roles, 'Rôle <span class="text-danger">*</span>', {'label_attr': {'class': 'form-label'}, 'label_html': true}) }}
+                                        <div class="mt-2">
+                                            {% for child in form.roles %}
+                                                <div class="form-check form-switch mb-2">
+                                                    {{ form_widget(child, {'attr': {'class': 'form-check-input bg-dark border-secondary'}}) }}
+                                                    {{ form_label(child, null, {'label_attr': {'class': 'form-check-label text-white'}}) }}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="form-text text-white"><i class="bi bi-shield-lock me-1"></i> Définit les permissions de l'utilisateur</div>
+                                        {{ form_errors(form.roles) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_label(form.password, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.password, {'attr': {'class': 'form-control bg-dark text-white border-secondary', 'placeholder': 'Laisser vide pour conserver le mot de passe actuel'}}) }}
+                                        <div class="form-text text-white"><i class="bi bi-key me-1"></i> Minimum 8 caractères, dont 1 majuscule, 1 minuscule et 1 chiffre</div>
+                                        {{ form_errors(form.password) }}
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-auto">
+                                    <a href="{{ path('app_admin_user') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Retour sans enregistrer</a>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#saveModal"><i class="bi bi-check-circle me-1"></i>Enregistrer les modifications</button>
+                                </div>
+                                
+                                <!-- Modal de confirmation pour l'enregistrement -->
+                                <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="saveModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="saveModalLabel">Confirmation</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p><i class="bi bi-question-circle text-primary me-2 fs-4"></i> Êtes-vous sûr de vouloir enregistrer les modifications ?</p>
+                                                <div class="alert alert-info">
+                                                    <small><i class="bi bi-info-circle me-1"></i> Les modifications seront immédiatement visibles sur le site.</small>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <button type="submit" class="btn btn-primary">Confirmer</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Colonne d'informations à droite -->
+                <div class="col-12 col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header py-3">
+                            <h5 class="mb-0 fw-bold">Aide et informations</h5>
+                        </div>
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="alert alert-info mb-4">
+                                <i class="bi bi-info-circle me-2"></i> Vous êtes en train de modifier les informations de l'utilisateur. Tous les champs marqués d'un <span class="text-danger">*</span> sont obligatoires.
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h6 class="fw-bold"><i class="bi bi-info-circle-fill text-primary me-2"></i>À propos de cette page</h6>
+                                <p>Cette page vous permet de modifier les informations d'un utilisateur existant. Les modifications seront appliquées immédiatement après validation.</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h6 class="fw-bold"><i class="bi bi-person-badge text-info me-2"></i>Utilisateur en cours d'édition</h6>
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="avatar-circle me-3" style="width: 50px; height: 50px; background-color: #6c757d;">
+                                                <span class="initials">{{ form.firstname.vars.value|slice(0,1) }}{{ form.name.vars.value|slice(0,1) }}</span>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-bold">{{ form.firstname.vars.value }} {{ form.name.vars.value }}</h6>
+                                                <small class="text-muted">{{ form.email.vars.value }}</small>
+                                            </div>
+                                        </div>
+                                        <div class="small">
+                                            <p class="mb-1"><i class="bi bi-calendar-event me-2"></i>Date de création : <span class="fw-bold">{{ "now"|date("d/m/Y") }}</span></p>
+                                            <p class="mb-0"><i class="bi bi-key me-2"></i>Identifiant : <span class="fw-bold">{{ user is defined ? user.id : 'N/A' }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h6 class="fw-bold"><i class="bi bi-lightbulb-fill text-warning me-2"></i>Conseils</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><i class="bi bi-check-circle text-success me-2"></i>Vérifiez l'orthographe des noms et prénoms</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle text-success me-2"></i>Assurez-vous que l'adresse email est correcte et valide</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle text-success me-2"></i>Confirmez les modifications avant de valider</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h6 class="fw-bold"><i class="bi bi-shield-fill-check text-success me-2"></i>Sécurité</h6>
+                                <p>Les informations personnelles des utilisateurs sont protégées conformément à notre politique de confidentialité et au RGPD.</p>
+                                <div class="alert alert-warning mt-2">
+                                    <i class="bi bi-exclamation-triangle me-2"></i> Attention : La modification des informations de l'utilisateur sera immédiatement appliquée après validation.
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-info">
+                                <i class="bi bi-question-circle me-2"></i>Besoin d'aide supplémentaire ? Contactez l'administrateur système.
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -80,3 +173,4 @@
     </div>
 </div>
 {% endblock %}
+

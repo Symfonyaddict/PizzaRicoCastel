@@ -3,31 +3,62 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-<div class="admin-main-content">
-    <div class="d-flex justify-content-between align-items-center page-title-box">
-        <div>
-            <h1 class="mb-1">{{ title }}</h1>
-            <p class="text-muted mb-0">Modifiez les balises meta pour améliorer le référencement de cette page.</p>
-        </div>
-        <a href="{{ path('app_admin_seo') }}" class="btn-admin btn-admin-secondary">
-            <i class="bi bi-arrow-left"></i>
-            <span>Retour à la liste</span>
-        </a>
-    </div>
+<div class="admin-layout">
+    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+    
+    <div class="admin-content" id="adminContent">
+        <div class="admin-main-content p-4">
+            <h1 class="mb-4">{{ title }}</h1>
+            
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb bg-dark p-3 rounded">
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin_dashboard') }}" class="text-decoration-none text-white">Tableau de bord</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin_seo') }}" class="text-decoration-none text-white">SEO</a></li>
+                    <li class="breadcrumb-item active text-white" aria-current="page">Modifier {{ seo.pageName }}</li>
+                </ol>
+            </nav>
 
-    <div class="row">
-        <div class="col-12 col-xl-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                    {{ form_start(form, {'attr': {'class': 'admin-form'}}) }}
-                        {{ form_widget(form) }}
-                        <div class="d-flex justify-content-end mt-5 pt-3 border-top border-light">
-                            <button type="submit" class="btn-admin btn-admin-success px-5">
-                                <i class="bi bi-check-lg"></i>
-                                <span>Enregistrer les paramètres SEO</span>
-                            </button>
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+                            {{ form_start(form) }}
+                                <div class="mb-3">
+                                    {{ form_label(form.pageName) }}
+                                    {{ form_widget(form.pageName) }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form_label(form.metaTitle) }}
+                                    {{ form_widget(form.metaTitle) }}
+                                    <div class="form-text">Idéalement entre 50 et 60 caractères.</div>
+                                </div>
+                                <div class="mb-4">
+                                    {{ form_label(form.metaDescription) }}
+                                    {{ form_widget(form.metaDescription) }}
+                                    <div class="form-text">Idéalement entre 150 et 160 caractères.</div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <a href="{{ path('app_admin_seo') }}" class="btn-admin btn-admin-secondary">Annuler</a>
+                                    <button type="submit" class="btn-admin btn-admin-primary">Mettre à jour le SEO</button>
+                                </div>
+                            {{ form_end(form) }}
                         </div>
-                    {{ form_end(form) }}
+                    </div>
+                </div>
+                
+                <div class="col-12 col-lg-4">
+                    <div class="card bg-dark text-white border-secondary">
+                        <div class="card-header border-secondary">
+                            <h6 class="mb-0">Aperçu Google (Simulé)</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="google-preview">
+                                <div class="text-primary mb-1" style="font-size: 1.2rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ seo.metaTitle }}</div>
+                                <div class="text-success small mb-1">https://pizzarico.fr/{{ seo.pageName == 'home' ? '' : seo.pageName }}</div>
+                                <div class="text-white-50 small">{{ seo.metaDescription }}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

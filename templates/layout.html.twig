@@ -28,19 +28,17 @@
         {% endblock %}
     </head>
     <body class="admin-body">
-        <div class="admin-layout">
-            <!-- Sidebar Admin -->
-            {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
-            
-            <!-- Main Content Area -->
-            <div class="admin-content d-flex flex-column">
-                <main class="flex-grow-1">
-                    {% include "AdminComponents/flash/flash.html.twig" %}
-                    {% block body %}{% endblock %}
-                </main>
+        {# <header>
+            {% include "AdminComponents/adminNavbar/adminNavbar.html.twig" %}
+        </header> #}
 
-                {% include "AdminComponents/adminFooter/adminFooter.html.twig" %}
-            </div>
-        </div>
+        <main class="container-fluid p-0">
+        {% include "AdminComponents/flash/flash.html.twig" %}
+            {% block body %}{% endblock %}
+        </main>
+
+        <footer class="pb-4">
+            {% include "AdminComponents/adminFooter/adminFooter.html.twig" %}
+        </footer>
     </body>
 </html>

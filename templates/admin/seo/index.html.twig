@@ -3,47 +3,38 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-<div class="admin-main-content">
-    <div class="page-title-box">
-        <h1 class="mb-1">{{ title }}</h1>
-        <p class="text-muted mb-0">Optimisez le référencement naturel (SEO) de vos pages.</p>
-    </div>
+<div class="admin-layout">
+    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+    
+    <div class="admin-content" id="adminContent">
+        <div class="admin-main-content p-4">
+            <h1 class="mb-4">{{ title }}</h1>
 
-    <div class="card">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Page</th>
-                            <th>Titre Meta (Browser)</th>
-                            <th class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in seos %}
-                        <tr>
-                            <td>
-                                <span class="fw-bold text-primary">{{ item.pageName|capitalize }}</span>
-                            </td>
-                            <td>
-                                <div class="text-truncate text-muted small" style="max-width: 400px;" title="{{ item.metaTitle }}">
-                                    {{ item.metaTitle }}
-                                </div>
-                            </td>
-                            <td class="text-end">
-                                <a href="{{ path('app_admin_seo_edit', {'id': item.id}) }}" class="btn-admin btn-admin-secondary btn-sm" title="Modifier">
-                                    <i class="bi bi-pencil me-2"></i>Modifier
-                                </a>
-                            </td>
-                        </tr>
-                        {% else %}
-                        <tr>
-                            <td colspan="3" class="text-center py-5 text-muted">Aucune configuration SEO trouvée.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="admin-table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Page</th>
+                                    <th>Meta Title</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in seos %}
+                                <tr>
+                                    <td>{{ item.pageName }}</td>
+                                    <td>{{ item.metaTitle }}</td>
+                                    <td>
+                                        <a href="{{ path('app_admin_seo_edit', {'id': item.id}) }}" class="btn-admin btn-admin-success btn-sm"><i class="bi bi-pencil"></i> Modifier</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

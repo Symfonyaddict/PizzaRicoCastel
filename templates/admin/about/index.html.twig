@@ -3,74 +3,73 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-<div class="admin-main-content">
-    <div class="page-title-box">
-        <h1 class="mb-1">{{ title }}</h1>
-        <p class="text-muted mb-0">Racontez l'histoire de Pizza Rico et partagez vos valeurs.</p>
-    </div>
+<div class="admin-layout">
+    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+    
+    <div class="admin-content" id="adminContent">
+        <div class="admin-main-content p-4">
+            <h1 class="mb-4">{{ title }}</h1>
+            
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb bg-dark p-3 rounded">
+                    <li class="breadcrumb-item"><a href="{{ path('app_admin_dashboard') }}" class="text-decoration-none text-white">Tableau de bord</a></li>
+                    <li class="breadcrumb-item active text-white" aria-current="page">À Propos</li>
+                </ol>
+            </nav>
 
-    <div class="row">
-        <div class="col-12 col-xl-7">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header">
-                    <h5 class="mb-0 fw-bold text-primary">Contenu de la section</h5>
-                </div>
-                <div class="card-body p-4">
-                    {{ form_start(form, {'attr': {'class': 'admin-form'}}) }}
-                        <div class="mb-4">
-                            {{ form_row(form.title) }}
+            <div class="row">
+                <div class="col-12 col-lg-7">
+                    <div class="card shadow-sm">
+                        <div class="card-header py-3">
+                            <h5 class="mb-0 fw-bold text-white"><i class="bi bi-pencil-square me-2"></i>Édition du contenu</h5>
                         </div>
-                        <div class="mb-4">
-                            {{ form_row(form.content) }}
-                        </div>
-                        <div class="d-flex justify-content-end mt-4">
-                            <button type="submit" class="btn-admin btn-admin-success px-5">
-                                <i class="bi bi-save me-2"></i>Mettre à jour
-                            </button>
-                        </div>
-                    {{ form_end(form) }}
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-12 col-xl-5 mt-4 mt-xl-0">
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-body p-4">
-                    <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-lightbulb me-2"></i>Conseils de rédaction</h6>
-                    <div class="d-flex gap-3 mb-3">
-                        <div class="stats-icon rounded-circle flex-shrink-0" style="width: 32px; height: 32px; font-size: 0.8rem;">
-                            <i class="bi bi-check-lg"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-1 fw-bold">Soyez authentique</h6>
-                            <p class="small text-muted mb-0">Racontez l'origine de votre pizzeria et votre passion.</p>
-                        </div>
-                    </div>
-                    <div class="d-flex gap-3 mb-3">
-                        <div class="stats-icon rounded-circle flex-shrink-0" style="width: 32px; height: 32px; font-size: 0.8rem;">
-                            <i class="bi bi-check-lg"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-1 fw-bold">Qualité des produits</h6>
-                            <p class="small text-muted mb-0">Parlez de votre pâte maison et de vos ingrédients frais.</p>
-                        </div>
-                    </div>
-                    <div class="d-flex gap-3">
-                        <div class="stats-icon rounded-circle flex-shrink-0" style="width: 32px; height: 32px; font-size: 0.8rem;">
-                            <i class="bi bi-check-lg"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-1 fw-bold">Structure aérée</h6>
-                            <p class="small text-muted mb-0">Faites des paragraphes courts pour une lecture facile sur mobile.</p>
+                        <div class="card-body p-4">
+                            {{ form_start(form) }}
+                                <div class="mb-4">
+                                    {{ form_label(form.title, 'Titre de la section', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.title, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Ex: Notre Histoire'}}) }}
+                                    <div class="form-text">C'est le titre principal qui apparaîtra sur la page d'accueil.</div>
+                                </div>
+                                <div class="mb-4">
+                                    {{ form_label(form.content, 'Contenu textuel', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.content, {'attr': {'class': 'form-control', 'rows' : 12, 'placeholder': 'Racontez votre histoire ici...'}}) }}
+                                    <div class="form-text">Utilisez des sauts de ligne pour séparer vos paragraphes.</div>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn-admin btn-admin-primary btn-lg"><i class="bi bi-save me-2"></i>Mettre à jour la présentation</button>
+                                </div>
+                            {{ form_end(form) }}
                         </div>
                     </div>
                 </div>
-            </div>
+                
+                <div class="col-12 col-lg-5">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header py-3">
+                            <h5 class="mb-0 fw-bold text-white"><i class="bi bi-lightbulb me-2"></i>Conseils de rédaction</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item border-0 px-0">
+                                    <h6 class="fw-bold text-primary">Soyez authentique</h6>
+                                    <p class="small text-muted">Racontez l'origine de votre pizzeria, vos valeurs et votre passion pour la cuisine italienne.</p>
+                                </li>
+                                <li class="list-group-item border-0 px-0">
+                                    <h6 class="fw-bold text-primary">Mettez en avant vos produits</h6>
+                                    <p class="small text-muted">Parlez de votre pâte maison, de vos ingrédients frais et de votre cuisson au feu de bois.</p>
+                                </li>
+                                <li class="list-group-item border-0 px-0">
+                                    <h6 class="fw-bold text-primary">Structurez votre texte</h6>
+                                    <p class="small text-muted">Faites des phrases courtes et des paragraphes aérés pour une lecture agréable sur mobile.</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-            <div class="card border-0 shadow-sm bg-primary-soft">
-                <div class="card-body p-4">
-                    <h6 class="fw-bold mb-2 text-primary"><i class="bi bi-info-circle me-2"></i>Note</h6>
-                    <p class="mb-0 small text-muted">Cette section aide vos clients à vous faire confiance et à comprendre ce qui vous rend unique.</p>
+                    <div class="alert alert-warning border-0 shadow-sm">
+                        <h6 class="alert-heading fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>Note importante</h6>
+                        <p class="mb-0 small">Cette section est cruciale pour votre image de marque. Elle aide vos clients à vous faire confiance et à comprendre ce qui vous rend unique.</p>
+                    </div>
                 </div>
             </div>
         </div>

@@ -9,68 +9,69 @@
         </button>
     </div>
     
-    <div class="sidebar-nav">
+    <div class="mt-auto">
         <a href="{{ path('app_admin_dashboard') }}" class="nav-link {{ 'app_admin_dashboard'|is_active_route }}">
             <i class="bi bi-speedometer2"></i>
             <span>Tableau de bord</span>
         </a>
-        
-        <div class="sidebar-divider"></div>
-        
         <a href="{{ path('app_admin_pizza') }}" class="nav-link {{ 'app_admin_pizza'|is_active_route }}">
             <i class="bi bi-card-list"></i>
-            <span>Pizzas</span>
+            <span>Gérer les Pizzas</span>
         </a>
         <a href="{{ path('app_admin_boisson') }}" class="nav-link {{ 'app_admin_boisson'|is_active_route }}">
             <i class="bi bi-cup-straw"></i>
-            <span>Boissons</span>
+            <span>Gérer les Boissons</span>
         </a>
-        <a href="{{ path('app_admin_news') }}" class="nav-link {{ 'app_admin_news'|is_active_route }}">
-            <i class="bi bi-newspaper"></i>
-            <span>Actualités</span>
-        </a>
-        
-        <div class="sidebar-divider"></div>
-        
         <a href="{{ path('app_admin_hero') }}" class="nav-link {{ 'app_admin_hero'|is_active_route }}">
             <i class="bi bi-image"></i>
-            <span>Sections Hero</span>
+            <span>Gérer les Sections Hero</span>
         </a>
         <a href="{{ path('app_admin_about') }}" class="nav-link {{ 'app_admin_about'|is_active_route }}">
             <i class="bi bi-info-circle"></i>
             <span>À Propos</span>
         </a>
+        <a href="{{ path('app_admin_news') }}" class="nav-link {{ 'app_admin_news'|is_active_route }}">
+            <i class="bi bi-newspaper"></i>
+            <span>Actualités</span>
+        </a>
         <a href="{{ path('app_admin_seo') }}" class="nav-link {{ 'app_admin_seo'|is_active_route }}">
             <i class="bi bi-search"></i>
             <span>SEO</span>
         </a>
-        
-        <div class="sidebar-divider"></div>
-        
         <a href="{{ path('app_admin_user') }}" class="nav-link {{ 'app_admin_user'|is_active_route }}">
             <i class="bi bi-people"></i>
-            <span>Utilisateurs</span>
+            <span>Gérer les Utilisateurs</span>
         </a>
     </div>
+    <hr>
+    <div class="mt-auto">
+        <a class="nav-link text-warning" href="{{ path('app_admin_user') }}">
 
-    <div class="sidebar-footer">
-        <div class="d-flex flex-column gap-2">
-            {% if app.user %}
-                <div class="nav-link text-warning mb-2 p-0" style="cursor: default; background: transparent !important; box-shadow: none !important;">
-                    <i class="bi bi-person-circle"></i>
-                    <span class="text-truncate">{{ app.user.firstname }}</span>
-                </div>
-            {% endif %}
-            
-            <a href="{{ path('app_home') }}" class="nav-link p-2">
-                <i class="bi bi-house"></i>
-                <span>Voir le site</span>
-            </a>
-            
-            <a href="{{ path('app_logout') }}" class="nav-link p-2 text-danger">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Déconnexion</span>
-            </a>
-        </div>
+            <i class="bi bi-person-circle"></i> 
+            <span>
+                {% if app.user %}
+                    {{ app.user.firstname ~ ' ' ~ app.user.name }}
+                {% endif %}
+            </span>
+        </a>
+        
+    </div>
+    <div class="mt-auto">
+        <a class="nav-link" href="{{ path('app_home') }}">
+
+            <i class="bi bi-house"></i> 
+            <span>
+                Retour au site
+            </span>
+        </a>
+    </div>
+    <div class="mt-auto">
+        <a class="nav-link" href="{{ path('app_logout') }}">
+
+            <i class="bi bi-box-arrow-right"></i> 
+            <span>
+                Deconnexion
+            </span>
+        </a>
     </div>
 </div>
