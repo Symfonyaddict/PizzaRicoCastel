@@ -11,8 +11,9 @@ php bin/console importmap:install --env=prod --no-interaction
 echo "🎨 Compilation des assets..."
 php bin/console asset-map:compile --env=prod --no-interaction
 
-echo "⏳ Exécution des migrations..."
-php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+echo "🗄️ Mise à jour du schéma de la base de données (Direct)..."
+# On utilise schema:update --force car les fichiers de migrations sont incompatibles avec PostgreSQL
+php bin/console doctrine:schema:update --force --no-interaction
 
 echo "🚀 Lancement d'Apache..."
 exec apache2-foreground
