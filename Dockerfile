@@ -30,25 +30,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copie des fichiers de dépendances
-COPY composer.json composer.lock ./
-
-# Installation des dépendances sans scripts
-ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV APP_ENV=prod
-RUN composer install --no-dev --no-scripts --no-autoloader
-
-# Copie du reste du projet
+# Copie du projet
 COPY . .
 
-# Suppression manuelle du cache local s'il a été copié
-RUN rm -rf var/cache/*
+# Installation des dépendances sans AUCUN script Symfony (évite le crash DebugBundle)
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV APP_ENV=prod
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
-# Génération de l'autoloader et nettoyage final
-RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
-
-# Création des dossiers nécessaires et permissions
-RUN mkdir -p var/cache var/log public/images && \
+# Suppression du cache local et création des dossiers
+RUN rm -rf var/cache/* && \
+    mkdir -p var/cache var/log public/images && \
     chown -R www-data:www-data var public/images
 
 # Gestion du script d'entrée
