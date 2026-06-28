@@ -33,5 +33,12 @@ RUN composer install --no-dev --optimize-autoloader
 # Droits sur les dossiers de cache et logs
 RUN chown -R www-data:www-data var/ public/images/
 
+# Copie du script d'entrée
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Utilisation du script comme point d'entrée
+ENTRYPOINT ["docker-entrypoint.sh"]
+
 # Exposition du port 80
 EXPOSE 80
