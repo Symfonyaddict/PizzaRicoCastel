@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+
+Sitemap: https://votre-domaine.com/sitemap.xml
