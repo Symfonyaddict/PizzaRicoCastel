@@ -33,14 +33,18 @@ WORKDIR /var/www/html
 # Copie des fichiers de dépendances
 COPY composer.json composer.lock ./
 
-# Installation des dépendances sans scripts et sans autoloader définitif
+# Installation des dépendances sans scripts
 ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV APP_ENV=prod
 RUN composer install --no-dev --no-scripts --no-autoloader
 
 # Copie du reste du projet
 COPY . .
 
-# Génération de l'autoloader et exécution des scripts post-install
+# Suppression manuelle du cache local s'il a été copié
+RUN rm -rf var/cache/*
+
+# Génération de l'autoloader et nettoyage final
 RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
 
 # Création des dossiers nécessaires et permissions
