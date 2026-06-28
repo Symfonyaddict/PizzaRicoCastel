@@ -4,60 +4,43 @@
 {% block title %}Tableau de bord{% endblock %}
 
 {% block body %}
-    <div class="admin-layout">
-        <!-- Sidebar Admin -->
-        {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
-        
-        <!-- Main Content -->
-        <div class="admin-content" id="adminContent">
-            
-            <!-- Main Content Area -->
-            <div class="admin-main-content p-4">
-            {% if app.user %}
-                <h1 class="mb-4">Bienvenue sur ton tableau de bord {{ app.user.firstname }}</h1>
-            {% endif %}
+    <!-- Statistiques rapides -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon bg-primary text-white"><i class="bi bi-people"></i></div>
+                <div class="stats-title">Utilisateurs</div>
+                <div class="stats-value">{{ totalUsers }}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon bg-success text-white"><i class="bi bi-pizza"></i></div>
+                <div class="stats-title">Pizzas</div>
+                <div class="stats-value">{{ totalPizzas }}</div>
+                <div class="stats-change text-muted small">{{ specialPizzas }} spéciales</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon bg-warning text-white"><i class="bi bi-cup-straw"></i></div>
+                <div class="stats-title">Boissons</div>
+                <div class="stats-value">{{ totalBoissons }}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="stats-icon bg-info text-white"><i class="bi bi-tag"></i></div>
+                <div class="stats-title">Prix moyen Pizza</div>
+                <div class="stats-value">{{ avgPizzaPrice|number_format(2, ',', '') }}€</div>
+            </div>
+        </div>
+    </div>
 
-                <!-- Statistiques rapides -->
-                <div class="row mb-4">
-                    <div class="col-md-3">
-                        <div class="stats-card">
-                            <div class="stats-icon bg-primary text-white"><i class="bi bi-people"></i></div>
-                            <div class="stats-title">Utilisateurs</div>
-                            <div class="stats-value">{{ totalUsers }}</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stats-card">
-                            <div class="stats-icon bg-success text-white"><i class="bi bi-pizza"></i></div>
-                            <div class="stats-title">Pizzas</div>
-                            <div class="stats-value">{{ totalPizzas }}</div>
-                            <div class="stats-change text-muted small">{{ specialPizzas }} spéciales</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stats-card">
-                            <div class="stats-icon bg-warning text-white"><i class="bi bi-cup-straw"></i></div>
-                            <div class="stats-title">Boissons</div>
-                            <div class="stats-value">{{ totalBoissons }}</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stats-card">
-                            <div class="stats-icon bg-info text-white"><i class="bi bi-tag"></i></div>
-                            <div class="stats-title">Prix moyen Pizza</div>
-                            <div class="stats-value">{{ avgPizzaPrice|number_format(2, ',', '') }}€</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="alert alert-info">
-                            <i class="bi bi-info-circle me-2"></i> Utilisez le menu latéral pour gérer les différentes sections de votre restaurant.
-                        </div>
-                    </div>
-                </div>
-
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i> Utilisez le menu latéral pour gérer les différentes sections de votre restaurant.
             </div>
         </div>
     </div>
