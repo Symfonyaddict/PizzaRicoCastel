@@ -5,112 +5,107 @@
 {% block body %}
 <!-- Delete Boisson Modal -->
 <div class="modal fade" id="deleteBoissonModal" tabindex="-1" aria-labelledby="deleteBoissonModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteBoissonModalLabel">Confirmation de suppression</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header border-bottom-0 pt-4 px-4">
+        <h5 class="modal-title fw-bold" id="deleteBoissonModalLabel">Supprimer cette boisson ?</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        Êtes-vous sûr de vouloir supprimer cette boisson ?
+      <div class="modal-body px-4 py-3">
+        <p class="text-muted">Êtes-vous sûr de vouloir supprimer cette boisson de la carte ?</p>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>Annuler</button>
+      <div class="modal-footer border-top-0 pb-4 px-4">
+        <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal">Annuler</button>
         <form id="deleteForm" method="post" action="">
             <input type="hidden" name="_token" value="" id="deleteToken">
-            <button type="submit" class="btn-admin btn-admin-danger"><i class="bi bi-trash me-1"></i>Supprimer</button>
+            <button type="submit" class="btn-admin btn-admin-danger">Supprimer</button>
         </form>
       </div>
     </div>
   </div>
 </div>
 
-<div class="admin-layout">
-    <!-- Sidebar Admin -->
-    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
+<div class="admin-main-content">
+    <div class="d-flex justify-content-between align-items-center page-title-box">
+        <div>
+            <h1 class="mb-1">{{ title|default('Gestion des Boissons') }}</h1>
+            <p class="text-muted mb-0">Gérez les sodas, bières et autres boissons de votre établissement.</p>
+        </div>
+        <a href="{{ path('app_admin_boisson_create') }}" class="btn-admin btn-admin-primary">
+            <i class="bi bi-plus-lg"></i>
+            <span>Ajouter une boisson</span>
+        </a>
+    </div>
     
-    <!-- Main Content -->
-    <div class="admin-content" id="adminContent">
-        <!-- Main Content Area -->
-        <div class="admin-main-content p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="mb-0">{{ title|default('Gestion des Boissons') }}</h1>
-                <div class="d-flex gap-2">
-                    <div class="input-group">
-                        <span class="input-group-text bg-dark border-secondary text-white"><i class="bi bi-search"></i></span>
-                        <input type="text" id="adminSearch" class="form-control bg-dark text-white border-secondary" placeholder="Rechercher une boisson...">
-                    </div>
-                    <a href="{{ path('app_admin_boisson_create') }}" class="btn-admin btn-admin-primary text-nowrap"><i class="bi bi-plus-circle me-2"></i>Ajouter une boisson</a>
-                </div>
-            </div>
-            
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success">
-                    <i class="bi bi-check-circle me-2"></i> {{ message }}
-                </div>
-            {% endfor %}
-
-            <!-- Boissons List -->
-            <div class="card shadow-sm">
-                <div class="card-header py-3">
-                    <h5 class="mb-0 fw-bold">Boissons</h5>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="admin-table table-hover mb-0">
-                            <thead>
-                                <tr>
-                                    <th width="100">Image</th>
-                                    <th>Nom</th>
-                                    <th>Catégorie</th>
-                                    <th>Contenance</th>
-                                    <th>Prix</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for boisson in boissons %}
-                                <tr>
-                                    <td>
-                                        <div class="pizza-thumbnail"> {# Réutilisation de la classe existante pour la cohérence #}
-                                            {% if boisson.image %}
-                                                <img src="{{ asset('images/boissons/' ~ boisson.image) }}" alt="{{ boisson.name }}">
-                                            {% else %}
-                                                <div class="placeholder-image"><i class="bi bi-cup-straw"></i></div>
-                                            {% endif %}
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Aperçu</th>
+                            <th>Nom</th>
+                            <th>Catégorie</th>
+                            <th>Contenance</th>
+                            <th>Prix</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for boisson in boissons %}
+                        <tr>
+                            <td>
+                                <div class="pizza-thumbnail">
+                                    {% if boisson.image %}
+                                        <img src="{{ asset('images/boissons/' ~ boisson.image) }}" alt="{{ boisson.name }}">
+                                    {% else %}
+                                        <div class="h-100 w-100 d-flex align-items-center justify-content-center bg-dark">
+                                            <i class="bi bi-cup-straw text-muted"></i>
                                         </div>
-                                    </td>
-                                    <td>{{ boisson.name }}</td>
-                                    <td>
-                                        <span class="badge bg-secondary">{{ boisson.category|default('Non classé') }}</span>
-                                    </td>
-                                    <td>{{ boisson.capacity|default('-') }}</td>
-                                    <td>{{ boisson.price|number_format(2, ',', '') }}€</td>
-                                    <td>
-                                        <div class="d-flex gap-1">
-                                            <a href="{{ path('app_admin_boisson_edit', {'slug': boisson.slug}) }}" class="btn-admin btn-admin-success btn-sm"><i class="bi bi-pencil"></i></a>
-                                            <button type="button" class="btn-admin btn-admin-danger btn-sm delete-boisson" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#deleteBoissonModal" 
-                                                data-delete-url="{{ path('app_admin_boisson_delete', {'id': boisson.id}) }}"
-                                                data-token="{{ csrf_token('delete' ~ boisson.id) }}">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% else %}
-                                <tr>
-                                    <td colspan="4" class="text-center py-4">Aucune boisson trouvée.</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="fw-bold">{{ boisson.name }}</span>
+                            </td>
+                            <td>
+                                <span class="badge-status badge-processing">{{ boisson.category|default('Non classé') }}</span>
+                            </td>
+                            <td class="text-muted">{{ boisson.capacity|default('-') }}</td>
+                            <td>
+                                <span class="fw-bold text-primary">{{ boisson.price|number_format(2, ',', '') }}€</span>
+                            </td>
+                            <td class="text-end">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <a href="{{ path('app_admin_boisson_edit', {'slug': boisson.slug}) }}" class="btn-admin btn-admin-secondary btn-sm" title="Modifier">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button" class="btn-admin btn-admin-danger btn-sm delete-boisson" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#deleteBoissonModal" 
+                                        data-delete-url="{{ path('app_admin_boisson_delete', {'id': boisson.id}) }}"
+                                        data-token="{{ csrf_token('delete' ~ boisson.id) }}"
+                                        title="Supprimer">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <div class="text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                                    Aucune boisson trouvée.
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>  
+    </div>
 </div>
 {% endblock %}
 
@@ -129,18 +124,6 @@
                 
                 deleteForm.setAttribute('action', deleteUrl);
                 deleteToken.setAttribute('value', token);
-            });
-        });
-
-        // Live Search
-        const searchInput = document.getElementById('adminSearch');
-        const tableRows = document.querySelectorAll('.admin-table tbody tr');
-
-        searchInput.addEventListener('input', function() {
-            const query = this.value.toLowerCase();
-            tableRows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                row.style.display = text.includes(query) ? '' : 'none';
             });
         });
     });

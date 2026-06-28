@@ -3,117 +3,33 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-<div class="admin-layout">
-    <!-- Sidebar Admin -->
-    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
-    
-    <!-- Main Content -->
-    <div class="admin-content" id="adminContent">
-        <!-- Main Content Area -->
-        <div class="admin-main-content p-4 news-edit-main-container">
-            {# Header de page harmonisé #}
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h1 class="mb-0 fw-bold text-white">{{ title }}</h1>
-                </div>
-                <div class="d-flex gap-2">
-                    <a href="{{ path('app_admin_news') }}" class="btn-admin btn-admin-secondary">
-                        <i class="bi bi-x-circle me-2"></i>Annuler
-                    </a>
-                    <button type="submit" form="news-form" class="btn-admin btn-admin-primary">
-                        <i class="bi bi-check-circle me-2"></i>Enregistrer
-                    </button>
-                </div>
-            </div>
+<div class="admin-main-content">
+    <div class="d-flex justify-content-between align-items-center page-title-box">
+        <div>
+            <h1 class="mb-1">{{ title }}</h1>
+            <p class="text-muted mb-0">Modifiez le contenu de votre article d'actualité.</p>
+        </div>
+        <a href="{{ path('app_admin_news') }}" class="btn-admin btn-admin-secondary">
+            <i class="bi bi-arrow-left"></i>
+            <span>Retour à la liste</span>
+        </a>
+    </div>
 
-            {# Breadcrumb harmonisé #}
-            <nav aria-label="breadcrumb" class="mb-4">
-                <ol class="breadcrumb news-breadcrumb p-3 rounded">
-                    <li class="breadcrumb-item"><a href="{{ path('app_admin_dashboard') }}" class="text-decoration-none text-white"><i class="bi bi-house-door me-1"></i>Tableau de bord</a></li>
-                    <li class="breadcrumb-item"><a href="{{ path('app_admin_news') }}" class="text-decoration-none text-white"><i class="bi bi-newspaper me-1"></i>Actualités</a></li>
-                    <li class="breadcrumb-item active text-white-50" aria-current="page"><i class="bi bi-pencil me-1"></i>Modifier l'article</li>
-                </ol>
-            </nav>
-
-            {{ form_start(form, {'attr': {'id': 'news-form', 'class': 'admin-form'}}) }}
-            <div class="row">
-                {# Colonne Gauche : Contenu #}
-                <div class="col-12 col-lg-8">
-                    <div class="card news-card-standard mb-4">
-                        <div class="card-header py-3">
-                            <h5 class="mb-0 fw-bold text-white">Contenu rédactionnel</h5>
+    <div class="row">
+        <div class="col-12 col-xl-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    {{ form_start(form, {'attr': {'class': 'admin-form'}}) }}
+                        {{ form_widget(form) }}
+                        <div class="d-flex justify-content-end mt-5 pt-3 border-top border-light">
+                            <button type="submit" class="btn-admin btn-admin-success px-5">
+                                <i class="bi bi-check-lg"></i>
+                                <span>Publier les modifications</span>
+                            </button>
                         </div>
-                        <div class="card-body p-4">
-                            <div class="mb-4">
-                                {{ form_label(form.title, 'Titre de l\'actualité', {'label_attr': {'class': 'form-label fw-bold text-white-50 small text-uppercase'}}) }}
-                                {{ form_widget(form.title, {'attr': {'class': 'form-control news-input-standard', 'placeholder': 'Ex: Nouvelle pizza du mois !'}}) }}
-                                {{ form_errors(form.title) }}
-                            </div>
-                            
-                            <div class="mb-0">
-                                {{ form_label(form.content, 'Texte de l\'article', {'label_attr': {'class': 'form-label fw-bold text-white-50 small text-uppercase'}}) }}
-                                {{ form_widget(form.content, {'attr': {'class': 'form-control news-input-standard', 'rows': 15, 'placeholder': 'Rédigez votre actualité ici...'}}) }}
-                                {{ form_errors(form.content) }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {# Colonne Droite : Image & Info #}
-                <div class="col-12 col-lg-4">
-                    {# Bloc Image #}
-                    <div class="card news-card-standard mb-4">
-                        <div class="card-header py-3">
-                            <h5 class="mb-0 fw-bold text-white">Média</h5>
-                        </div>
-                        <div class="card-body p-4 text-center">
-                            <div class="mb-3 text-start">
-                                {{ form_label(form.imageFile, 'Changer l\'image', {'label_attr': {'class': 'form-label fw-bold text-white-50 small text-uppercase'}}) }}
-                                {{ form_widget(form.imageFile, {'attr': {'class': 'form-control news-input-standard form-control-sm'}}) }}
-                                {{ form_errors(form.imageFile) }}
-                            </div>
-
-                            {% if news.image %}
-                                <div class="mt-4">
-                                    <p class="small text-white-50 mb-2 text-start">Image actuelle :</p>
-                                    <div class="rounded overflow-hidden border border-secondary shadow-sm">
-                                        <img src="{{ asset('images/news/' ~ news.image) }}" class="img-fluid w-100" style="max-height: 250px; object-fit: cover;">
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div class="py-5 border border-dashed border-secondary rounded">
-                                    <i class="bi bi-image text-white-50 display-1"></i>
-                                    <p class="text-white-50 small mt-2">Aucun visuel associé</p>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    {# Bloc Publication #}
-                    <div class="card news-card-standard">
-                        <div class="card-header py-3">
-                            <h5 class="mb-0 fw-bold text-white">Paramètres</h5>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="mb-3">
-                                <label class="small text-white-50 fw-bold text-uppercase d-block mb-1">Création</label>
-                                <span class="text-white fw-bold">{{ news.createdAt|date('d/m/Y H:i') }}</span>
-                            </div>
-                            <div class="mb-3">
-                                <label class="small text-white-50 fw-bold text-uppercase d-block mb-1">Statut</label>
-                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">En ligne</span>
-                            </div>
-                            <div class="pt-3 border-top border-secondary">
-                                <label class="small text-white-50 fw-bold text-uppercase d-block mb-1">URL (Slug)</label>
-                                <div class="bg-black bg-opacity-50 p-2 rounded border border-secondary small text-primary text-truncate">
-                                    {{ news.slug }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {{ form_end(form) }}
                 </div>
             </div>
-            {{ form_end(form) }}
         </div>
     </div>
 </div>

@@ -3,112 +3,31 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-<div class="admin-layout">
-    <!-- Sidebar Admin -->
-    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
-    
-    <!-- Main Content -->
-    <div class="admin-content" id="adminContent">
-        
-        <!-- Main Content Area -->
-        <div class="admin-main-content p-4">
-            <h1 class="mb-4">{{ title }}</h1>
-            
-            <!-- Breadcrumb navigation -->
-            <nav aria-label="breadcrumb" class="mb-4">
-                <ol class="breadcrumb bg-dark p-3 rounded">
-                    <li class="breadcrumb-item"><a href="{{ path('app_admin_dashboard') }}" class="text-decoration-none text-white"><i class="bi bi-house-door me-1"></i>Tableau de bord</a></li>
-                    <li class="breadcrumb-item"><a href="{{ path('app_admin_hero') }}" class="text-decoration-none text-white"><i class="bi bi-image me-1"></i>Sections Hero</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-plus-circle me-1"></i>Création</li>
-                </ol>
-            </nav>
-            
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success">
-                    <i class="bi bi-check-circle me-2"></i> {{ message }}
-                </div>
-            {% endfor %}
-            
-            {% for message in app.flashes('error') %}
-                <div class="alert alert-danger">
-                    <i class="bi bi-exclamation-circle me-2"></i> {{ message }}
-                </div>
-            {% endfor %}
-            
-            <div class="row">
-                <div class="col-12 col-lg-8">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0 fw-bold">Informations de la section Hero</h5>
-                            <span class="badge bg-primary"><i class="bi bi-plus-circle me-1"></i> Création</span>
+<div class="admin-main-content">
+    <div class="d-flex justify-content-between align-items-center page-title-box">
+        <div>
+            <h1 class="mb-1">{{ title }}</h1>
+            <p class="text-muted mb-0">Créez une nouvelle bannière pour mettre en avant vos offres.</p>
+        </div>
+        <a href="{{ path('app_admin_hero') }}" class="btn-admin btn-admin-secondary">
+            <i class="bi bi-arrow-left"></i>
+            <span>Retour à la liste</span>
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-xl-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    {{ form_start(form, {'attr': {'class': 'admin-form'}}) }}
+                        {{ form_widget(form) }}
+                        <div class="d-flex justify-content-end mt-5 pt-3 border-top border-light">
+                            <button type="submit" class="btn-admin btn-admin-primary px-5">
+                                <i class="bi bi-plus-lg"></i>
+                                <span>Créer la section</span>
+                            </button>
                         </div>
-                        <div class="card-body">
-                            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
-                                <div class="row mb-3">
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group mb-3">
-                                            {{ form_label(form.title, 'Titre', {'label_attr': {'class': 'form-label'}}) }}
-                                            {{ form_widget(form.title, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Bienvenue chez Pizza Rico'}}) }}
-                                            <div class="form-text text-muted">Le titre principal affiché dans la section Hero.</div>
-                                            {{ form_errors(form.title) }}
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group mb-3">
-                                            {{ form_label(form.subTitle, 'Sous-titre', {'label_attr': {'class': 'form-label'}}) }}
-                                            {{ form_widget(form.subTitle, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Au coeur de Castelsarrasin depuis 1995'}}) }}
-                                            <div class="form-text text-muted">Le sous-titre affiché sous le titre principal.</div>
-                                            {{ form_errors(form.subTitle) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group mb-4">
-                                    {{ form_label(form.backgroundFile, 'Image d\'arrière-plan', {'label_attr': {'class': 'form-label'}}) }}
-                                    {{ form_widget(form.backgroundFile, {'attr': {'class': 'form-control'}}) }}
-                                    <div class="form-text text-muted">L'image d'arrière-plan de la section Hero. Recommandation: 1920x1080px.</div>
-                                    {{ form_errors(form.backgroundFile) }}
-                                </div>
-                                
-                                <div class="d-flex justify-content-between">
-                                    <a href="{{ path('app_admin_hero') }}" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Retour</a>
-                                    <button type="submit" class="btn-admin btn-admin-primary"><i class="bi bi-check-circle me-2"></i>Enregistrer</button>
-                                </div>
-                            {{ form_end(form) }}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-12 col-lg-4 mt-4 mt-lg-0">
-                    <div class="card shadow-sm h-100 d-flex flex-column">
-                        <div class="card-header py-3">
-                            <h5 class="mb-0 fw-bold">Conseils</h5>
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <div class="alert alert-primary mb-4">
-                                <i class="bi bi-info-circle me-2"></i>La section Hero est la première chose que vos clients verront sur votre site.
-                            </div>
-                            
-                            <h6 class="fw-bold mb-3">Recommandations :</h6>
-                            <ul class="mb-4">
-                                <li>Utilisez un titre accrocheur et concis</li>
-                                <li>Le sous-titre doit compléter le titre avec des informations supplémentaires</li>
-                                <li>Choisissez une image de haute qualité qui représente bien votre restaurant</li>
-                                <li>Assurez-vous que le texte reste lisible sur l'image d'arrière-plan</li>
-                            </ul>
-                            
-                            <h6 class="fw-bold mb-3">Format d'image recommandé :</h6>
-                            <ul>
-                                <li>Résolution : 1920x1080 pixels</li>
-                                <li>Format : JPG ou PNG</li>
-                                <li>Taille maximale : 2 Mo</li>
-                            </ul>
-                            
-                            <div class="alert alert-info mt-auto">
-                                <i class="bi bi-question-circle me-2"></i>Besoin d'aide supplémentaire ? Contactez l'administrateur système.
-                            </div>
-                        </div>
-                    </div>
+                    {{ form_end(form) }}
                 </div>
             </div>
         </div>

@@ -3,117 +3,83 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-<div class="admin-layout">
-    <!-- Sidebar Admin -->
-    {% include 'AdminComponents/adminSidebar/adminSidebar.html.twig' %}
-    
-    <!-- Main Content -->
-    <div class="admin-content" id="adminContent">
-        
-        <!-- Main Content Area -->
-        <div class="admin-main-content p-4">
-            <h1 class="mb-4">{{ title }}</h1>
-            
-            <!-- Breadcrumb navigation -->
-            <nav aria-label="breadcrumb" class="mb-4">
-                <ol class="breadcrumb bg-dark p-3 rounded">
-                    <li class="breadcrumb-item"><a href="{{ path('app_admin_dashboard') }}" class="text-decoration-none text-white"><i class="bi bi-house-door me-1"></i>Tableau de bord</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-image me-1"></i>Sections Hero</li>
-                </ol>
-            </nav>
-            
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success">
-                    <i class="bi bi-check-circle me-2"></i> {{ message }}
-                </div>
-            {% endfor %}
-            
-            {% for message in app.flashes('error') %}
-                <div class="alert alert-danger">
-                    <i class="bi bi-exclamation-circle me-2"></i> {{ message }}
-                </div>
-            {% endfor %}
-            
-            <div class="d-flex justify-content-end mb-4">
-                <a href="{{ path('app_admin_hero_create') }}" class="btn-admin btn-admin-primary"><i class="bi bi-plus-circle me-2"></i>Ajouter une section Hero</a>
-            </div>
-            
-            <!-- Hero Sections List -->
-            <div class="card shadow-sm">
-                <div class="card-header py-3">
-                    <h5 class="mb-0 fw-bold">Sections Hero</h5>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="admin-table table-hover mb-0">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Titre</th>
-                                    <th>Sous-titre</th>
-                                    <th>Image d'arrière-plan</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% if heroes is empty %}
-                                    <tr>
-                                        <td colspan="5" class="text-center py-4">
-                                            <i class="bi bi-info-circle me-2"></i>Aucune section Hero n'a été créée.
-                                        </td>
-                                    </tr>
-                                {% else %}
-                                    {% for hero in heroes %}
-                                    <tr>
-                                        <td>{{ hero.id }}</td>
-                                        <td>{{ hero.title }}</td>
-                                        <td>{{ hero.subTitle }}</td>
-                                        <td>
-                                            {% if hero.background %}
-                                                <img src="{{ asset('images/hero/' ~ hero.background) }}" alt="{{ hero.title }}" class="img-thumbnail" style="max-width: 100px;">
-                                            {% else %}
-                                                <span class="badge bg-secondary">Aucune image</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                <a href="{{ path('app_admin_hero_edit', {'id': hero.id}) }}" class="btn-admin btn-admin-success btn-sm"><i class="bi bi-pencil"></i></a>
-                                                <button type="button" class="btn-admin btn-admin-danger btn-sm delete-hero" data-bs-toggle="modal" data-bs-target="#deleteHeroModal" data-hero-id="{{ hero.id }}" data-csrf-token="{{ csrf_token('delete' ~ hero.id) }}"><i class="bi bi-trash"></i></button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+<div class="admin-main-content">
+    <div class="d-flex justify-content-between align-items-center page-title-box">
+        <div>
+            <h1 class="mb-1">{{ title }}</h1>
+            <p class="text-muted mb-0">Personnalisez les bannières d'accueil de votre site.</p>
         </div>
-    </div>  
-</div>
-
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteHeroModal" tabindex="-1" aria-labelledby="deleteHeroModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteHeroModalLabel">Confirmation de suppression</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Êtes-vous sûr de vouloir supprimer cette section Hero ? Cette action est irréversible.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>Annuler</button>
-                <form id="deleteHeroForm" method="post" action="">
-                    <input type="hidden" name="_token" value="">
-                    <button type="submit" class="btn-admin btn-admin-danger"><i class="bi bi-trash me-1"></i>Supprimer</button>
-                </form>
+        <a href="{{ path('app_admin_hero_create') }}" class="btn-admin btn-admin-primary">
+            <i class="bi bi-plus-lg"></i>
+            <span>Nouvelle section</span>
+        </a>
+    </div>
+    
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Aperçu</th>
+                            <th>Titre Principal</th>
+                            <th>Sous-titre</th>
+                            <th>Statut</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for hero in heroes %}
+                        <tr>
+                            <td>
+                                <div class="pizza-thumbnail" style="width: 80px;">
+                                    {% if hero.image %}
+                                        <img src="{{ asset('images/hero/' ~ hero.image) }}" alt="{{ hero.title }}">
+                                    {% else %}
+                                        <div class="h-100 w-100 d-flex align-items-center justify-content-center bg-dark">
+                                            <i class="bi bi-image text-muted"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="fw-bold">{{ hero.title }}</span>
+                            </td>
+                            <td>
+                                <div class="text-truncate text-muted small" style="max-width: 200px;">
+                                    {{ hero.subtitle }}
+                                </div>
+                            </td>
+                            <td>
+                                {% if hero.isActive %}
+                                    <span class="badge-status badge-delivered">Actif</span>
+                                {% else %}
+                                    <span class="badge-status badge-pending">Inactif</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <a href="{{ path('app_admin_hero_edit', {'id': hero.id}) }}" class="btn-admin btn-admin-secondary btn-sm" title="Modifier">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="post" action="{{ path('app_admin_hero_delete', {'id': hero.id}) }}" onsubmit="return confirm('Supprimer cette section ?');" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ hero.id) }}">
+                                        <button type="submit" class="btn-admin btn-admin-danger btn-sm" title="Supprimer">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">Aucune section hero configurée.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
-
-
 {% endblock %}

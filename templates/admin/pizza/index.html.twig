@@ -2,61 +2,53 @@
 
 {% block title %}{{ title|default('Gestion des Pizzas') }}{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-{% endblock %}
-
 {% block body %}
 <!-- Delete Pizza Modal -->
 <div class="modal fade" id="deletePizzaModal" tabindex="-1" aria-labelledby="deletePizzaModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deletePizzaModalLabel">Confirmation de suppression</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header border-bottom-0 pt-4 px-4">
+        <h5 class="modal-title fw-bold" id="deletePizzaModalLabel">Supprimer cette pizza ?</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        Êtes-vous sûr de vouloir supprimer cette pizza ?
+      <div class="modal-body px-4 py-3">
+        <p class="text-muted">Cette action est irréversible. Êtes-vous sûr de vouloir supprimer cette pizza de votre menu ?</p>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>Annuler</button>
+      <div class="modal-footer border-top-0 pb-4 px-4">
+        <button type="button" class="btn-admin btn-admin-secondary" data-bs-dismiss="modal">Annuler</button>
         <form id="deleteForm" method="post" action="">
             <input type="hidden" name="_token" value="" id="deleteToken">
-            <button type="submit" class="btn-admin btn-admin-danger"><i class="bi bi-trash me-1"></i>Supprimer</button>
+            <button type="submit" class="btn-admin btn-admin-danger">Supprimer</button>
         </form>
       </div>
     </div>
   </div>
 </div>
 
-<div class="admin-main-content p-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="mb-0">{{ title|default('Gestion des Pizzas') }}</h1>
-        <div class="d-flex gap-2">
-            <div class="input-group">
-                <span class="input-group-text bg-dark border-secondary text-white"><i class="bi bi-search"></i></span>
-                <input type="text" id="adminSearch" class="form-control bg-dark text-white border-secondary" placeholder="Rechercher une pizza...">
-            </div>
-            <a href="{{ path('app_admin_pizza_create') }}" class="btn-admin btn-admin-primary text-nowrap"><i class="bi bi-plus-circle me-2"></i>Ajouter une pizza</a>
+<div class="admin-main-content">
+    <div class="d-flex justify-content-between align-items-center page-title-box">
+        <div>
+            <h1 class="mb-1">{{ title|default('Gestion des Pizzas') }}</h1>
+            <p class="text-muted mb-0">Gérez votre menu de pizzas, ingrédients et tarifs.</p>
         </div>
+        <a href="{{ path('app_admin_pizza_create') }}" class="btn-admin btn-admin-primary">
+            <i class="bi bi-plus-lg"></i>
+            <span>Ajouter une pizza</span>
+        </a>
     </div>
     
-    <!-- Pizzas List -->
-    <div class="card shadow-sm">
-        <div class="card-header py-3">
-            <h5 class="mb-0 fw-bold">Pizzas</h5>
-        </div>
+    <div class="card">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="admin-table table-hover mb-0">
+                <table class="admin-table">
                     <thead>
                         <tr>
-                            <th width="100">Image</th>
+                            <th>Aperçu</th>
                             <th>Nom</th>
                             <th>Ingrédients</th>
                             <th>Prix (M/L)</th>
-                            <th>Spéciale</th>
-                            <th>Actions</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,35 +59,54 @@
                                     {% if pizza.image %}
                                         <img src="{{ asset('images/pizzas/' ~ pizza.image) }}" alt="{{ pizza.name }}">
                                     {% else %}
-                                        <div class="placeholder-image"><i class="bi bi-pizza"></i></div>
+                                        <div class="h-100 w-100 d-flex align-items-center justify-content-center bg-dark">
+                                            <i class="bi bi-pizza text-muted"></i>
+                                        </div>
                                     {% endif %}
                                 </div>
                             </td>
-                            <td>{{ pizza.name }}</td>
                             <td>
-                                <div class="text-truncate" title="{{ pizza.ingredient }}">
+                                <span class="fw-bold">{{ pizza.name }}</span>
+                            </td>
+                            <td>
+                                <div class="text-truncate text-muted small" style="max-width: 250px;" title="{{ pizza.ingredient }}">
                                     {{ pizza.ingredient }}
                                 </div>
                             </td>
                             <td>
-                                {{ pizza.priceMedium|number_format(2, ',', '') }}€ / {{ pizza.priceLarge|number_format(2, ',', '') }}€
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold text-primary">{{ pizza.priceMedium|number_format(2, ',', '') }}€</span>
+                                    <span class="smaller text-muted">L: {{ pizza.priceLarge|number_format(2, ',', '') }}€</span>
+                                </div>
                             </td>
                             <td>
                                 <span class="badge-status {% if pizza.isSpecial %}badge-processing{% else %}badge-pending{% endif %}">
                                     {% if pizza.isSpecial %}Spéciale{% else %}Standard{% endif %}
                                 </span>
                             </td>
-                            <td>
-                                <div class="d-flex gap-1">
-                                    <a href="{{ path('app_admin_pizza_edit', {'slug': pizza.slug}) }}" class="btn-admin btn-admin-success btn-sm"><i class="bi bi-pencil"></i></a>
+                            <td class="text-end">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <a href="{{ path('app_admin_pizza_edit', {'slug': pizza.slug}) }}" class="btn-admin btn-admin-secondary btn-sm" title="Modifier">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
                                     <button type="button" class="btn-admin btn-admin-danger btn-sm delete-pizza" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#deletePizzaModal" 
                                         data-pizza-id="{{ pizza.id }}"
                                         data-delete-url="{{ path('app_admin_pizza_delete', {'id': pizza.id}) }}"
-                                        data-token="{{ csrf_token('delete' ~ pizza.id) }}">
+                                        data-token="{{ csrf_token('delete' ~ pizza.id) }}"
+                                        title="Supprimer">
                                         <i class="bi bi-trash"></i>
                                     </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <div class="text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                                    Aucune pizza trouvée.
                                 </div>
                             </td>
                         </tr>
@@ -112,7 +123,6 @@
 {{ parent() }}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Handle delete pizza modal
         const deletePizzaButtons = document.querySelectorAll('.delete-pizza');
         const deleteForm = document.getElementById('deleteForm');
         const deleteToken = document.getElementById('deleteToken');
@@ -124,18 +134,6 @@
                 
                 deleteForm.setAttribute('action', deleteUrl);
                 deleteToken.setAttribute('value', token);
-            });
-        });
-
-        // Live Search
-        const searchInput = document.getElementById('adminSearch');
-        const tableRows = document.querySelectorAll('.admin-table tbody tr');
-
-        searchInput.addEventListener('input', function() {
-            const query = this.value.toLowerCase();
-            tableRows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                row.style.display = text.includes(query) ? '' : 'none';
             });
         });
     });
