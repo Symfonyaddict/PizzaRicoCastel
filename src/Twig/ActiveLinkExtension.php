@@ -50,8 +50,13 @@ class ActiveLinkExtension extends AbstractExtension
      */
     public function isActiveRoute(string $routeName): string
     {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request) {
+            return '';
+        }
+
         // Récupère le nom de la route de la requête actuelle
-        $currentRoute = $this->requestStack->getCurrentRequest()->attributes->get('_route');
+        $currentRoute = $request->attributes->get('_route');
         
         // Compare avec la route testée et retourne la classe CSS appropriée
         return $currentRoute === $routeName ? 'active' : '';
