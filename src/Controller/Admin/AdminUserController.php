@@ -10,6 +10,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AdminUserController extends AbstractController
 {
+    #[Route('/admin/user', name: 'app_admin_user')]
+    public function index(UserRepository $userRepository): Response
+    {
+        return $this->render('admin/user/edit.html.twig', [
+            'users' => $userRepository->findAll(),
+        ]);
+    }
+
     #[Route('/make-me-admin/{email}', name: 'app_make_admin')]
     public function makeAdmin(string $email, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
