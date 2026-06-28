@@ -1,15 +1,19 @@
 # Utilisation d'une image PHP officielle avec Apache
 FROM php:8.2-apache
 
-# Installation des dépendances système
+# Installation des dépendances système et PHP
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libpq-dev \
     libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
     zip \
     unzip \
     git \
-    && docker-php-ext-install intl pdo pdo_pgsql zip opcache
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install intl pdo pdo_pgsql pdo_mysql zip opcache gd
 
 # Activation du module rewrite d'Apache (pour le .htaccess)
 RUN a2enmod rewrite
