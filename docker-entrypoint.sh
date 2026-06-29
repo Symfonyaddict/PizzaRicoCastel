@@ -9,6 +9,17 @@ if [ -z "$DATABASE_URL" ]; then
     # mais on prévient l'utilisateur.
 fi
 
+# Correction du préfixe postgres:// en postgresql:// pour Render
+if [ -n "$DATABASE_URL" ]; then
+    # On remplace postgres:// par postgresql:// si nécessaire
+    case "$DATABASE_URL" in
+        postgres://*)
+            export DATABASE_URL="postgresql://${DATABASE_URL#postgres://}"
+            echo "🔧 DATABASE_URL corrigée (préfixe postgresql:// ajouté)"
+            ;;
+    esac
+fi
+
 echo "🧹 Préparation du cache..."
 php bin/console cache:clear --env=prod --no-warmup
 php bin/console cache:warmup --env=prod
