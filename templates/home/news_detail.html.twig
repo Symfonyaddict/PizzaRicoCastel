@@ -13,30 +13,30 @@
                 </ol>
             </nav>
 
-            <article class="news-article bg-dark-surface p-4 p-md-5 rounded-4 shadow-lg text-white">
+            <article class="news-article bg-dark-surface p-4 p-md-5 rounded-4 shadow-lg">
                 <header class="mb-4">
                     <div class="d-flex align-items-center mb-3">
-                        <span class="badge bg-primary px-3 py-2 rounded-pill me-3">Actualité</span>
+                        <span class="badge bg-rico-primary px-3 py-2 rounded-pill me-3">Actualité</span>
                         <time class="text-white-50 small"><i class="bi bi-calendar3 me-2"></i>{{ item.createdAt|date('d F Y', 'Europe/Paris') }}</time>
                     </div>
-                    <h1 class="display-4 fw-bold mb-0">{{ item.title }}</h1>
+                    <h1 class="display-4 fw-bold mb-0 text-white">{{ item.title }}</h1>
                 </header>
 
                 {% if item.image %}
-                    <div class="news-image-wrapper mb-5 rounded-4 overflow-hidden shadow">
+                    <div class="news-image-wrapper mb-5 rounded-4 overflow-hidden shadow border border-secondary border-opacity-25">
                         <img src="{{ asset('images/news/' ~ item.image) }}" alt="{{ item.title }}" class="img-fluid w-100" style="max-height: 500px; object-fit: cover;">
                     </div>
                 {% endif %}
 
-                <div class="news-content lead text-white-50">
+                <div class="news-content lead text-white-50" style="line-height: 1.8;">
                     {{ item.content|nl2br }}
                 </div>
 
-                <footer class="mt-5 pt-4 border-top border-secondary">
+                <footer class="mt-5 pt-4 border-top border-secondary border-opacity-25">
                     <a href="{{ path('app_home') }}" class="btn btn-outline-primary rounded-pill px-4">
                         <i class="bi bi-arrow-left me-2"></i> Retour à l'accueil
                     </a>
-                </div>
+                </footer>
             </article>
         </div>
     </div>

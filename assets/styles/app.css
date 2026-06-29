@@ -759,3 +759,43 @@ footer .row {
     transform: translateY(-3px);
     border-color: var(--primary);
 }
+
+/* Utilitaires de couleurs personnalisés pour le thème Rico */
+.text-rico-primary {
+    color: var(--primary) !important;
+}
+
+.bg-rico-primary {
+    background-color: var(--primary) !important;
+    color: white !important;
+}
+
+.text-rico-secondary {
+    color: var(--secondary) !important;
+}
+
+.bg-rico-secondary {
+    background-color: var(--secondary) !important;
+    color: var(--dark) !important;
+}
+
+/* Styles pour le fil d'Ariane (Breadcrumb) */
+.breadcrumb-item a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.breadcrumb-item a:hover {
+    opacity: 0.8;
+}
+
+.breadcrumb-item.active {
+    color: var(--text-light);
+    opacity: 0.5;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: var(--text-light);
+    opacity: 0.3;
+}
