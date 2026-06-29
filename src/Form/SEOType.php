@@ -20,18 +20,11 @@ class SEOType extends AbstractType
             ])
             ->add('metaTitle', TextType::class, [
                 'label' => 'Meta Title (Balise Titre)',
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'Ex: Pizza Rico | Meilleure pizzeria de Castelsarrasin'
-                ]
+                'attr' => ['class' => 'form-control']
             ])
             ->add('metaDescription', TextareaType::class, [
                 'label' => 'Meta Description',
-                'attr' => [
-                    'class' => 'form-control', 
-                    'rows' => 3,
-                    'placeholder' => 'Décrivez le contenu de la page en 160 caractères environ...'
-                ]
+                'attr' => ['class' => 'form-control', 'rows' => 3]
             ])
         ;
     }
