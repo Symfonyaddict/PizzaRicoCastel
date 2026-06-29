@@ -79,7 +79,7 @@ final class HomeController extends AbstractController
     /**
      * Affiche le détail d'une actualité.
      */
-    #[Route('/actualite/{slug}', name: 'app_news_detail')]
+    #[Route('/actualite/{slug}', name: 'app_news_detail', methods: ['GET'])]
     public function newsDetail(News $news): Response
     {
         return $this->render('home/news_detail.html.twig', [
