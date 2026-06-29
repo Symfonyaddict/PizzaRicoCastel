@@ -749,57 +749,63 @@
 .btn-admin {
     border-radius: 0.25rem;
     padding: 0.5rem 1rem;
-    font-weight: 500;
+    font-weight: 600;
     transition: var(--admin-transition);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white !important; /* Force la couleur blanche pour la lisibilité */
+    text-decoration: none !important;
+}
+
+.btn-admin i, 
+.btn-admin span {
+    color: inherit !important; /* Assure que les icônes et le texte héritent du blanc */
 }
 
 .btn-admin-primary {
     background-color: var(--admin-primary);
-    border-color: var(--admin-primary);
-    color: white;
+    border: 1px solid var(--admin-primary);
 }
 
 .btn-admin-primary:hover {
-    background-color: var(--admin-primary-dark, #2980b9);
-    border-color: var(--admin-primary-dark, #2980b9);
-    color: white;
+    background-color: var(--admin-primary-dark);
+    border-color: var(--admin-primary-dark);
+    color: white !important;
 }
 
 .btn-admin-secondary {
     background-color: var(--admin-secondary);
-    border-color: var(--admin-secondary);
-    color: white;
+    border: 1px solid var(--admin-secondary);
 }
 
 .btn-admin-secondary:hover {
-    background-color: var(--admin-secondary-dark, #1a252f);
-    border-color: var(--admin-secondary-dark, #1a252f);
-    color: white;
+    background-color: var(--admin-secondary-dark);
+    border-color: var(--admin-secondary-dark);
+    color: white !important;
 }
 
 .btn-admin-success {
     background-color: var(--admin-success);
-    border-color: var(--admin-success);
-    color: white;
+    border: 1px solid var(--admin-success);
 }
 
 .btn-admin-success:hover {
-    background-color: var(--admin-success-dark, #27ae60);
-    border-color: var(--admin-success-dark, #27ae60);
-    color: white;
+    background-color: var(--admin-success-dark);
+    border-color: var(--admin-success-dark);
+    color: white !important;
 }
 
 .btn-admin-danger {
     background-color: var(--admin-danger);
-    border-color: var(--admin-danger);
-    color: white;
+    border: 1px solid var(--admin-danger);
 }
 
 .btn-admin-danger:hover {
-    background-color: var(--admin-danger-dark, #c0392b);
-    border-color: var(--admin-danger-dark, #c0392b);
-    color: white;
+    background-color: var(--admin-danger-dark);
+    border-color: var(--admin-danger-dark);
+    color: white !important;
 }
 
 /* Responsive */
