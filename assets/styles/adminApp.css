@@ -163,17 +163,26 @@
 .admin-body .form-control,
 .admin-body .form-select,
 .admin-body .form-check-input {
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-light) !important;
+    background-color: rgba(0, 0, 0, 0.3); /* Un peu plus sombre pour le contraste */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white !important; /* Texte saisi en blanc pur */
+    border-radius: 0.5rem;
+    padding: 0.6rem 1rem;
+}
+
+/* Style des placeholders pour qu'ils soient visibles mais distincts */
+.admin-body .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+    opacity: 1;
 }
 
 .admin-body .form-control:focus,
 .admin-body .form-select:focus {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.4);
     border-color: var(--admin-primary);
     color: white !important;
     box-shadow: 0 0 0 0.25rem rgba(248, 108, 0, 0.25);
+    outline: none;
 }
 
 .admin-body .form-label {
