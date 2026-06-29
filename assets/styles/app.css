@@ -34,7 +34,7 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
     z-index: 1000;
     cursor: pointer;
     border: none;
@@ -53,11 +53,21 @@
 }
 
 /* Styles généraux */
+html, body {
+    overflow-x: hidden; /* Empêche les scrollbars horizontales parasites */
+    width: 100%;
+    position: relative;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Scroll fluide sur iOS */
+}
+
 body {
     font-family: 'Montserrat', sans-serif;
     color: var(--text-light);
     background-color: var(--dark-bg);
-    transition: all 0.3s ease;
+    /* Suppression de la transition globale sur body qui tue les perfs au scroll */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Classe pour bloquer le défilement quand le menu mobile est ouvert */
@@ -131,15 +141,15 @@ body {
     top: 0;
     width: 100%;
     z-index: 1030;
-    transition: all 0.3s ease;
+    transition: padding 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     padding: 15px 0;
 }
 
 .navbar-scrolled {
     padding: 8px 0;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    background-color: rgba(18, 18, 18, 0.85) !important;
-    backdrop-filter: blur(10px);
+    background-color: var(--dark-surface) !important;
+    /* backdrop-filter supprimé car provoque des bugs d'affichage sur certains mobiles */
 }
 
 .navbar-brand {
@@ -328,9 +338,11 @@ body {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1513104890138-7c749659a591');
     background-size: cover;
     background-position: center;
+    background-attachment: scroll; /* Changé de fixed à scroll car fixed cause des lags énormes sur mobile */
     color: white;
     padding: 120px 0;
     margin-bottom: 3rem;
+    transform: translateZ(0); /* Force GPU */
 }
 
 .hero h1 {
@@ -404,13 +416,19 @@ body {
 .menu-card {
     border-radius: var(--radius-md);
     overflow: hidden;
-    transition: all 0.3s;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-sm);
     height: 100%;
     display: flex;
     flex-direction: column;
     background-color: var(--dark-surface);
+    /* Optimisation du rendu mobile pour éviter les glitchs au scroll */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: transform;
 }
 
 .menu-card:hover {
@@ -423,6 +441,9 @@ body {
     height: 200px;
     object-fit: cover;
     width: 100%;
+    /* Empêche les clignotements d'images lors du scroll/hover */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .menu-card .card-title {
