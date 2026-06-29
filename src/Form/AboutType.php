@@ -16,11 +16,18 @@ class AboutType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label' => 'Titre de la section',
-                'attr' => ['class' => 'form-control']
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Ex: Notre Histoire'
+                ]
             ])
             ->add('content', TextareaType::class, [
                 'label' => 'Contenu',
-                'attr' => ['class' => 'form-control', 'rows' => 10]
+                'attr' => [
+                    'class' => 'form-control', 
+                    'rows' => 10,
+                    'placeholder' => 'Rédigez ici le texte qui sera affiché dans la section "À propos"...'
+                ]
             ])
         ;
     }

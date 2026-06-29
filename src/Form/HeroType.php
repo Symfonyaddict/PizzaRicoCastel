@@ -22,11 +22,23 @@ class HeroType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title' )
-            ->add('subTitle')
+            ->add('title', null, [
+                'label' => 'Titre principal',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Ex: Les meilleures pizzas artisanales'
+                ]
+            ])
+            ->add('subTitle', null, [
+                'label' => 'Sous-titre',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Ex: Découvrez notre savoir-faire traditionnel'
+                ]
+            ])
             // Champ spécifique pour l'upload d'image géré par VichUploader
             ->add('backgroundFile', VichImageType::class, [
-                'label' => 'Image',
+                'label' => 'Image de fond',
                 'required' => false, // Non obligatoire lors de l'édition si l'image existe déjà
                 'allow_delete' => true, // Permet de supprimer l'image existante
                 'delete_label' => 'Supprimer l\'image',
@@ -34,7 +46,10 @@ class HeroType extends AbstractType
                 'download_uri' => true,
                 'image_uri' => true, // Affiche un aperçu de l'image actuelle
                 'asset_helper' => true,
-                'attr' => ['class' => 'form-control'], // Style pour le champ input
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Choisir une image de fond'
+                ],
             ])
         ;
     }

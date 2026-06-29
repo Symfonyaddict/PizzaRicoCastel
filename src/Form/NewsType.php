@@ -17,11 +17,18 @@ class NewsType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label' => 'Titre de l\'actualité',
-                'attr' => ['class' => 'form-control']
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Ex: Nouvelle pizza du mois !'
+                ]
             ])
             ->add('content', TextareaType::class, [
                 'label' => 'Contenu',
-                'attr' => ['class' => 'form-control', 'rows' => 10]
+                'attr' => [
+                    'class' => 'form-control', 
+                    'rows' => 10,
+                    'placeholder' => 'Rédigez le contenu de votre article ici...'
+                ]
             ])
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Image de l\'article',
@@ -30,7 +37,10 @@ class NewsType extends AbstractType
                 'download_uri' => true,
                 'image_uri' => true,
                 'asset_helper' => true,
-                'attr' => ['class' => 'form-control']
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Choisir une image'
+                ]
             ])
         ;
     }

@@ -22,8 +22,20 @@ class PizzaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('ingredient')
+            ->add('name', null, [
+                'label' => 'Nom de la pizza',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Ex: Margherita'
+                ]
+            ])
+            ->add('ingredient', null, [
+                'label' => 'Ingrédients',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Sauce tomate, mozzarella, basilic frais...'
+                ]
+            ])
             // Champ pour l'upload d'image géré par VichUploader
             ->add('imageFile', VichImageType::class, [
                 
@@ -35,10 +47,25 @@ class PizzaType extends AbstractType
                 'download_uri' => true,
                 'image_uri' => true, // Permet l'affichage de l'image actuellement associée
                 'asset_helper' => true,
-                'attr' => ['class' => 'form-control'],
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Choisir une image'
+                ],
             ])
-            ->add('priceMedium')
-            ->add('priceLarge')
+            ->add('priceMedium', null, [
+                'label' => 'Prix Moyen (€)',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Ex: 10.50'
+                ]
+            ])
+            ->add('priceLarge', null, [
+                'label' => 'Prix Large (€)',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Ex: 14.50'
+                ]
+            ])
             ->add('isSpecial')
         ;
     }

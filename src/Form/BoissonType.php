@@ -19,7 +19,10 @@ class BoissonType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom de la boisson',
-                'attr' => ['placeholder' => 'Ex: Coca-Cola']
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Ex: Coca-Cola'
+                ]
             ])
             ->add('category', ChoiceType::class, [
                 'label' => 'Catégorie',
@@ -31,17 +34,24 @@ class BoissonType extends AbstractType
                     'Jus de fruits' => 'Jus de fruits',
                     'Boissons Chaudes' => 'Boissons Chaudes',
                 ],
+                'attr' => ['class' => 'form-select'],
                 'placeholder' => 'Choisir une catégorie',
                 'required' => false,
             ])
             ->add('capacity', TextType::class, [
                 'label' => 'Contenance',
-                'attr' => ['placeholder' => 'Ex: 33cl, 1.5L'],
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Ex: 33cl, 1.5L'
+                ],
                 'required' => false,
             ])
             ->add('price', NumberType::class, [
                 'label' => 'Prix',
-                'attr' => ['placeholder' => 'Ex: 2.50']
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Ex: 2.50'
+                ]
             ])
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Image',

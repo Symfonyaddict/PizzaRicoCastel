@@ -22,25 +22,29 @@
                 <div class="col-12 col-lg-8">
                     <div class="card shadow-sm">
                         <div class="card-body p-4">
-                            {{ form_start(form) }}
-                                <div class="mb-3">
-                                    {{ form_label(form.title) }}
+                            {{ form_start(form, {'attr': {'class': 'admin-form'}}) }}
+                                <div class="mb-4">
+                                    {{ form_label(form.title, null, {'label_attr': {'class': 'form-label fw-bold text-white-50 small text-uppercase'}}) }}
                                     {{ form_widget(form.title) }}
                                     {{ form_errors(form.title) }}
                                 </div>
-                                <div class="mb-3">
-                                    {{ form_label(form.content) }}
-                                    {{ form_widget(form.content) }}
+                                <div class="mb-4">
+                                    {{ form_label(form.content, null, {'label_attr': {'class': 'form-label fw-bold text-white-50 small text-uppercase'}}) }}
+                                    {{ form_widget(form.content, {'attr': {'rows': 15}}) }}
                                     {{ form_errors(form.content) }}
                                 </div>
                                 <div class="mb-4">
-                                    {{ form_label(form.imageFile) }}
+                                    {{ form_label(form.imageFile, null, {'label_attr': {'class': 'form-label fw-bold text-white-50 small text-uppercase'}}) }}
                                     {{ form_widget(form.imageFile) }}
                                     {{ form_errors(form.imageFile) }}
                                 </div>
-                                <div class="d-flex justify-content-between">
-                                    <a href="{{ path('app_admin_news') }}" class="btn-admin btn-admin-secondary">Annuler</a>
-                                    <button type="submit" class="btn-admin btn-admin-primary">Publier l'actualité</button>
+                                <div class="d-flex justify-content-between pt-3 border-top border-secondary">
+                                    <a href="{{ path('app_admin_news') }}" class="btn-admin btn-admin-secondary">
+                                        <i class="bi bi-x-circle me-2"></i>Annuler
+                                    </a>
+                                    <button type="submit" class="btn-admin btn-admin-primary">
+                                        <i class="bi bi-check-circle me-2"></i>Publier l'actualité
+                                    </button>
                                 </div>
                             {{ form_end(form) }}
                         </div>
