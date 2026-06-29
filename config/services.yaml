@@ -4,10 +4,6 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    # Valeurs par défaut pour éviter le crash au build/warmup sur Render
-    env(DATABASE_URL): ''
-    env(DATABASE_URL_FALLBACK): 'postgresql://db_user:db_password@127.0.0.1:5432/db_name?serverVersion=16&charset=utf8'
-    env(APP_SECRET): '67d3d2a526330cc58d466d7176a6ca7a' # Valeur par défaut pour le warmup
 
 services:
     # default configuration for services in *this* file
