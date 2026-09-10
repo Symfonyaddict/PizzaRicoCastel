@@ -62,7 +62,7 @@ final class AdminBoissonController extends AbstractController
     {
         $boisson = $boissonRepo->findOneBy(['slug' => $slug]);
         
-        if (!$boisson) {
+        if (null===$boisson) {
             throw $this->createNotFoundException('La boisson demandée n\'existe pas');
         }
         
