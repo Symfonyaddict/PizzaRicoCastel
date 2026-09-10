@@ -31,3 +31,9 @@ Thumbs.db
 ###> liip/imagine-bundle ###
 /public/media/cache/
 ###< liip/imagine-bundle ###
+
+###> phpstan/phpstan ###
+/.composer-cache/
+/phpstan.neon
+/phpstan-baseline.neon
+###< phpstan/phpstan ###

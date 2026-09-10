@@ -1,0 +1,10 @@
+parameters:
+    level: 5
+    paths:
+        - src
+    excludePaths:
+        - src/Kernel.php
+    tmpDir: var/cache/phpstan
+    reportUnmatchedIgnoredErrors: false
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
