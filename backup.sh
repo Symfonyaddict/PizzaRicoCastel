@@ -5,7 +5,12 @@ APP_DIR="${APP_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 BACKUP_DIR="${BACKUP_DIR:-${APP_DIR}/var/backups}"
 TIMESTAMP="$(date '+%Y%m%d_%H%M%S')"
 DB_BACKUP_FILE="${BACKUP_DIR}/db_${TIMESTAMP}.sql"
-APP_BACKUP_FILE="${BACKUP_DIR}/app_${TIMESTAMP}.tar.zst"
+if command -v zstd >/dev/null 2>&1; then
+  APP_ARCHIVE_EXT="tar.zst"
+else
+  APP_ARCHIVE_EXT="tar.xz"
+fi
+APP_BACKUP_FILE="${BACKUP_DIR}/app_${TIMESTAMP}.${APP_ARCHIVE_EXT}"
 KEEP_DAYS="${KEEP_DAYS:-14}"
 PGDATABASE="${PGDATABASE:-pizzarico}"
 PGHOST="${PGHOST:-127.0.0.1}"
@@ -31,7 +36,7 @@ else
 fi
 
 log "Archive application : ${APP_BACKUP_FILE}"
-if command -v zstd >/dev/null 2>&1; then
+if [[ "${APP_ARCHIVE_EXT}" == "tar.zst" ]]; then
   tar --zstd -cf "${APP_BACKUP_FILE}" \
     --exclude="./var/cache" \
     --exclude="./var/log" \
@@ -40,7 +45,7 @@ if command -v zstd >/dev/null 2>&1; then
     --exclude="./public/assets" \
     -C "${APP_DIR}" .
 else
-  tar -cJf "${APP_BACKUP_FILE%.zst}.xz" \
+  tar -cJf "${APP_BACKUP_FILE}" \
     --exclude="./var/cache" \
     --exclude="./var/log" \
     --exclude="./vendor" \
