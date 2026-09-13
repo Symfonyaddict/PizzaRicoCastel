@@ -28,26 +28,26 @@ class Boisson
     private ?int $id = null;
 
     /**
-     * @var string|null Nom de la boisson
+     * @var string Nom de la boisson
      */
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le nom ne peut pas être vide")]
-    private ?string $name = null;
+    private string $name = '';
 
     /**
-     * @var string|null Version formatée pour l'URL (slug) du nom de la boisson
+     * @var string Version formatée pour l'URL (slug) du nom de la boisson
      */
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;
+    private string $slug = '';
 
     /**
-     * @var float|null Prix de la boisson
+     * @var float Prix de la boisson
      */
     #[ORM\Column]
     #[Assert\NotBlank(message: "Le prix ne peut pas être vide")]
     #[Assert\Positive(message: "Le prix doit être positif")]
     #[Assert\Range(min: 0.5, max: 100, notInRangeMessage: "Le prix doit être compris entre {{ min }}€ et {{ max }}€")]
-    private ?float $price = null;
+    private float $price = 0.0;
 
     /**
      * @var string|null Catégorie de la boisson (ex: Soda, Vin, Bière)
@@ -91,7 +91,7 @@ class Boisson
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -103,7 +103,7 @@ class Boisson
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }
@@ -115,7 +115,7 @@ class Boisson
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getPrice(): float
     {
         return $this->price;
     }
@@ -196,7 +196,7 @@ class Boisson
     #[ORM\PreUpdate]
     public function generateSlug(): void
     {
-        if (empty($this->slug) || $this->slug === null) {
+        if ('' === $this->slug) {
             $this->slug = $this->createSlug($this->getName());
         }
     }
@@ -206,14 +206,13 @@ class Boisson
      */
     private function createSlug(string $string): string
     {
-        // Convertir en minuscules et remplacer les espaces par des tirets
-        $slug = strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '-', $string), '-'));
         // Supprimer les caractères accentués
-        $slug = str_replace(
+        $sansAccents = str_replace(
             ['à','á','â','ã','ä', 'ç', 'è','é','ê','ë', 'ì','í','î','ï', 'ñ', 'ò','ó','ô','õ','ö', 'ù','ú','û','ü', 'ý','ÿ'],
             ['a','a','a','a','a', 'c', 'e','e','e','e', 'i','i','i','i', 'n', 'o','o','o','o','o', 'u','u','u','u', 'y','y'],
-            $slug
+            $string
         );
-        return $slug;
+        // Convertir en minuscules et remplacer les espaces par des tirets
+        return strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '-', $sansAccents), '-'));
     }
 }
