@@ -37,3 +37,8 @@ Thumbs.db
 /phpstan.neon
 /phpstan-baseline.neon
 ###< phpstan/phpstan ###
+
+###> outillage local ###
+/.trae/
+/REVUE_CODE_SECURITE_*.md
+###< outillage local ###
