@@ -21,14 +21,14 @@ class News
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    private ?string $title = null;
+    private string $title = '';
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
-    private ?string $content = null;
+    private string $content = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $slug = null;
+    private string $slug = '';
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
@@ -38,7 +38,7 @@ class News
     private ?File $imageFile = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
@@ -53,7 +53,7 @@ class News
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -65,7 +65,7 @@ class News
         return $this;
     }
 
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -77,7 +77,7 @@ class News
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }
@@ -114,7 +114,7 @@ class News
         }
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -130,7 +130,7 @@ class News
     #[ORM\PreUpdate]
     public function generateSlug(): void
     {
-        if (empty($this->slug)) {
+        if ('' === $this->slug) {
             $this->slug = strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '-', $this->title), '-'));
         }
     }
