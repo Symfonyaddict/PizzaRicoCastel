@@ -88,7 +88,7 @@ final class AdminPizzaController extends AbstractController
         // Recherche de la pizza correspondant au slug fourni
         $pizza = $pizzaRepo->findOneBy(['slug' => $slug]);
         
-        if (null===$pizza) {
+        if (null === $pizza) {
             throw $this->createNotFoundException('La pizza demandée n\'existe pas');
         }
         
