@@ -51,7 +51,8 @@ class AdminUserController extends AbstractController
     #[Route('/admin/user/delete/{id}', name: 'app_admin_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        if ($this->getUser() === $user) {
+        $currentUser = $this->getUser();
+        if ($currentUser instanceof User && $currentUser->getId() === $user->getId()) {
             $this->addFlash('error', 'Vous ne pouvez pas supprimer votre propre compte.');
             return $this->redirectToRoute('app_admin_user');
         }
@@ -67,19 +68,4 @@ class AdminUserController extends AbstractController
 
         return $this->redirectToRoute('app_admin_user');
     }
-
-    // #[Route('/make-me-admin/{email}', name: 'app_make_admin')]
-    // public function makeAdmin(string $email, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
-    // {
-    //     $user = $userRepository->findOneBy(['email' => $email]);
-
-    //     if (!$user) {
-    //         return new Response("Utilisateur non trouvé.", 404);
-    //     }
-
-    //     $user->setRoles(['ROLE_ADMIN']);
-    //     $entityManager->flush();
-
-    //     return new Response("L'utilisateur " . $email . " est maintenant ROLE_ADMIN ! Vous pouvez maintenant accéder à /admin.");
-    // }
 }
