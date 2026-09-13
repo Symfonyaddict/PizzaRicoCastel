@@ -12,16 +12,11 @@ use Twig\TwigFilter;
  */
 class ActiveLinkExtension extends AbstractExtension
 {
-    /**
-     * @var RequestStack Permet d'accéder à la requête HTTP courante
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * Constructeur de l'extension.
      * L'injection de dépendances de Symfony fournit automatiquement le RequestStack.
-     *
-     * @param RequestStack $requestStack
      */
     public function __construct(RequestStack $requestStack)
     {
@@ -31,7 +26,7 @@ class ActiveLinkExtension extends AbstractExtension
     /**
      * Déclare les filtres Twig personnalisés fournis par cette extension.
      *
-     * @return array Liste des filtres Twig
+     * @return array<int, TwigFilter>
      */
     public function getFilters(): array
     {
@@ -51,7 +46,7 @@ class ActiveLinkExtension extends AbstractExtension
     public function isActiveRoute(string $routeName): string
     {
         // Récupère le nom de la route de la requête actuelle
-        $currentRoute = $this->requestStack->getCurrentRequest()->attributes->get('_route');
+        $currentRoute = $this->requestStack->getCurrentRequest()?->attributes->get('_route');
         
         // Compare avec la route testée et retourne la classe CSS appropriée
         return $currentRoute === $routeName ? 'active' : '';

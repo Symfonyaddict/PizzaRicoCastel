@@ -28,10 +28,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     /**
-     * @var string|null Adresse email de l'utilisateur (utilisée comme identifiant de connexion)
+     * @var string Adresse email de l'utilisateur (utilisée comme identifiant de connexion)
      */
     #[ORM\Column(length: 180)]
-    private ?string $email = null;
+    private string $email = '';
 
     /**
      * @var list<string> Les rôles attribués à l'utilisateur (ex: ROLE_USER, ROLE_ADMIN)
@@ -46,23 +46,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $password;
 
     /**
-     * @var string|null Nom de famille de l'utilisateur
+     * @var string Nom de famille de l'utilisateur
      */
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private string $name = '';
 
     /**
-     * @var string|null Prénom de l'utilisateur
+     * @var string Prénom de l'utilisateur
      */
     #[ORM\Column(length: 255)]
-    private ?string $firstname = null;
+    private string $firstname = '';
+
+    public function __construct()
+    {
+        $this->password = '';
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -81,7 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return $this->email;
     }
 
     /**
@@ -138,7 +143,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // @deprecated, to be removed when upgrading to Symfony 8
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -150,7 +155,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getFirstname(): ?string
+    public function getFirstname(): string
     {
         return $this->firstname;
     }

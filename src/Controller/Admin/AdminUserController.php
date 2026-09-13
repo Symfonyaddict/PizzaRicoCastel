@@ -31,7 +31,7 @@ class AdminUserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('password')->getData();
-            if ($plainPassword) {
+            if (null !== $plainPassword && '' !== $plainPassword) {
                 $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
             }
 
@@ -48,35 +48,24 @@ class AdminUserController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/user/delete/{id}', name: 'app_admin_user_delete', methods: ['POST', 'GET'])]
-    public function delete(User $user, EntityManagerInterface $entityManager): Response
+    #[Route('/admin/user/delete/{id}', name: 'app_admin_user_delete', methods: ['POST'])]
+    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        // Empêcher la suppression de son propre compte
-        if ($this->getUser() === $user) {
+        $currentUser = $this->getUser();
+        if ($currentUser instanceof User && $currentUser->getId() === $user->getId()) {
             $this->addFlash('error', 'Vous ne pouvez pas supprimer votre propre compte.');
             return $this->redirectToRoute('app_admin_user');
         }
 
-        $entityManager->remove($user);
-        $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($user);
+            $entityManager->flush();
 
-        $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+            $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+        } else {
+            $this->addFlash('error', 'Token de sécurité invalide.');
+        }
 
         return $this->redirectToRoute('app_admin_user');
     }
-
-    // #[Route('/make-me-admin/{email}', name: 'app_make_admin')]
-    // public function makeAdmin(string $email, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
-    // {
-    //     $user = $userRepository->findOneBy(['email' => $email]);
-
-    //     if (!$user) {
-    //         return new Response("Utilisateur non trouvé.", 404);
-    //     }
-
-    //     $user->setRoles(['ROLE_ADMIN']);
-    //     $entityManager->flush();
-
-    //     return new Response("L'utilisateur " . $email . " est maintenant ROLE_ADMIN ! Vous pouvez maintenant accéder à /admin.");
-    // }
 }

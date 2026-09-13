@@ -123,18 +123,15 @@ final class AdminHeroController extends AbstractController
     #[Route('/delete/{id}', name: 'app_admin_hero_delete', methods: ['POST'])]
     public function delete(Request $request, Hero $hero, EntityManagerInterface $entityManager): Response
     {
-        // Vérification du token CSRF pour éviter les failles de sécurité (Cross-Site Request Forgery)
         if ($this->isCsrfTokenValid('delete'.$hero->getId(), $request->request->get('_token'))) {
-            // Préparation de la suppression
             $entityManager->remove($hero);
-            // Exécution de la suppression
             $entityManager->flush();
-            
-            // Message de confirmation
+
             $this->addFlash('success', 'La section Hero a été supprimée avec succès.');
+        } else {
+            $this->addFlash('error', 'Token de sécurité invalide.');
         }
-        
-        // Redirection vers la liste des éléments
+
         return $this->redirectToRoute('app_admin_hero');
     }
 }

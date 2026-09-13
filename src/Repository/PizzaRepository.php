@@ -42,13 +42,20 @@ class PizzaRepository extends ServiceEntityRepository
         ;
     }
 
-    //    public function findOneBySomeField($value): ?Pizza
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Retourne le prix moyen du format Large (calcul direct en DQL pour éviter findAll).
+     */
+    public function findAvgPriceLarge(): ?float
+    {
+        $result = $this->createQueryBuilder('p')
+            ->select('AVG(p.priceLarge) as avgPriceLarge')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        if (null === $result) {
+            return null;
+        }
+
+        return (float) $result;
+    }
 }

@@ -31,3 +31,21 @@ Thumbs.db
 ###> liip/imagine-bundle ###
 /public/media/cache/
 ###< liip/imagine-bundle ###
+
+###> phpstan/phpstan ###
+/.composer-cache/
+/phpstan.neon
+/phpstan-baseline.neon
+###< phpstan/phpstan ###
+
+###> fichiers uploadés et médias ###
+/public/images/
+/public/media/
+/media/
+/uploads/
+###< fichiers uploadés et médias ###
+
+###> outillage local ###
+/.trae/
+/REVUE_CODE_SECURITE_*.md
+###< outillage local ###
