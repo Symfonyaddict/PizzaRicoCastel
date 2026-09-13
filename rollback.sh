@@ -19,6 +19,7 @@ if [[ -n "${REMOTE_HOST}" && -n "${REMOTE_USER}" ]]; then
   ssh -o BatchMode=yes "${REMOTE_USER}@${REMOTE_HOST}" \
     "set -euo pipefail
      cd \"${REMOTE_DIR}\"
+     mkdir -p var/cache var/log public/images public/media
      git checkout --force \"${ROLLBACK_TO}\"
      ${COMPOSER_BIN} install --no-dev --optimize-autoloader --no-interaction --no-progress
      ${PHP_BIN} bin/console cache:clear --env=prod --no-warmup
@@ -27,6 +28,7 @@ if [[ -n "${REMOTE_HOST}" && -n "${REMOTE_USER}" ]]; then
   exit 0
 fi
 
+mkdir -p "${APP_DIR}/var/cache" "${APP_DIR}/var/log" "${APP_DIR}/public/images" "${APP_DIR}/public/media"
 if command -v git >/dev/null 2>&1; then
   git checkout --force "${ROLLBACK_TO}"
 fi

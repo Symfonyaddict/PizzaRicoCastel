@@ -16,16 +16,12 @@ idempotent_mkdir() { local d="$1"; if [[ ! -d "${d}" ]]; then mkdir -p "${d}"; f
 
 log "Déploiement idempotent depuis la branche ${BRANCH}..."
 
-idempotent_mkdir "${APP_DIR}/var/cache"
-idempotent_mkdir "${APP_DIR}/var/log"
-idempotent_mkdir "${APP_DIR}/public/images"
-idempotent_mkdir "${APP_DIR}/public/media"
-
 if [[ -n "${REMOTE_HOST}" && -n "${REMOTE_USER}" ]]; then
   log "Déploiement SSH sur ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}"
   ssh -o BatchMode=yes "${REMOTE_USER}@${REMOTE_HOST}" \
     "set -euo pipefail
      cd \"${REMOTE_DIR}\"
+     mkdir -p var/cache var/log public/images public/media
      git fetch --all --prune
      git checkout --force \"${BRANCH}\"
      git reset --hard \"origin/${BRANCH}\"
@@ -40,6 +36,10 @@ if [[ -n "${REMOTE_HOST}" && -n "${REMOTE_USER}" ]]; then
 fi
 
 log "Mode local : mise à jour du dépôt..."
+idempotent_mkdir "${APP_DIR}/var/cache"
+idempotent_mkdir "${APP_DIR}/var/log"
+idempotent_mkdir "${APP_DIR}/public/images"
+idempotent_mkdir "${APP_DIR}/public/media"
 if command -v git >/dev/null 2>&1; then
   git fetch --all --prune
   git checkout --force "${BRANCH}"
