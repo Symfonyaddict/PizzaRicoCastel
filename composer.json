@@ -101,12 +101,12 @@
         }
     },
     "require-dev": {
-        "phpstan/extension-installer": "*",
-        "phpstan/phpstan": "*",
-        "phpstan/phpstan-doctrine": "*",
-        "phpstan/phpstan-phpunit": "*",
-        "phpstan/phpstan-strict-rules": "*",
-        "phpstan/phpstan-symfony": "*",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^12.3.6",
         "symfony/browser-kit": "7.3.*",
         "symfony/css-selector": "7.3.*",
