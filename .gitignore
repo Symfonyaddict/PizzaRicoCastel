@@ -38,6 +38,13 @@ Thumbs.db
 /phpstan-baseline.neon
 ###< phpstan/phpstan ###
 
+###> fichiers uploadés et médias ###
+/public/images/
+/public/media/
+/media/
+/uploads/
+###< fichiers uploadés et médias ###
+
 ###> outillage local ###
 /.trae/
 /REVUE_CODE_SECURITE_*.md

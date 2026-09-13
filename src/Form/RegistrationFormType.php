@@ -11,60 +11,45 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
 
-/**
- * Formulaire d'inscription pour les nouveaux utilisateurs.
- */
 class RegistrationFormType extends AbstractType
 {
-    /**
-     * Construit le formulaire d'inscription.
-     *
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email')
             ->add('firstname')
             ->add('name')
-            // Case à cocher pour accepter les conditions d'utilisation, non mappée sur l'entité User
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepter nos conditions générales d\'utilisation.',
                     ]),
                 ],
             ])
-            // Champ pour le mot de passe en clair
             ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                // Non mappé pour éviter de stocker le mot de passe en clair en base
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Veuillez saisir un mot de passe.',
                     ]),
                     new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
+                        'min' => 12,
+                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères.',
                         'max' => 4096,
+                    ]),
+                    new NotCompromisedPassword([
+                        'message' => 'Ce mot de passe a été divulgué lors d\'une fuite de données, veuillez en choisir un autre.',
+                        'skipOnError' => true,
                     ]),
                 ],
             ])
         ;
     }
 
-    /**
-     * Configure l'association entre ce formulaire et l'entité User.
-     *
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

@@ -69,7 +69,10 @@ class AdminNewsController extends AbstractController
             $em->remove($news);
             $em->flush();
             $this->addFlash('success', 'L\'actualité a été supprimée.');
+        } else {
+            $this->addFlash('error', 'Token de sécurité invalide.');
         }
+
         return $this->redirectToRoute('app_admin_news');
     }
 }

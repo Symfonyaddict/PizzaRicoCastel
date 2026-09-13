@@ -1,0 +1,11 @@
+framework:
+    rate_limiter:
+        login_attempts:
+            policy: 'sliding_window'
+            limit: 5
+            interval: '1 minute'
+
+        register_attempts:
+            policy: 'sliding_window'
+            limit: 3
+            interval: '1 minute'
