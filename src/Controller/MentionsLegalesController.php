@@ -9,8 +9,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Affiche la page publique des mentions légales.
- * Le contenu est systématiquement issu de la base de données (entité MentionsLegales).
- * Aucun texte métier ne doit être en dur dans le template associé.
+ * L'ensemble des données est issu de l'entité MentionsLegales (base de données).
+ * Le contrôleur ne fournit aucun texte métier par défaut ; le template affiche
+ * un état vide invitant à renseigner le contenu depuis le backoffice.
  */
 final class MentionsLegalesController extends AbstractController
 {
@@ -19,20 +20,11 @@ final class MentionsLegalesController extends AbstractController
     {
         $mentions = $repository->findPublished();
 
-        if (null === $mentions) {
-            return $this->render('mentions-legales.html.twig', [
-                'title' => 'Mentions légales',
-                'content' => '',
-                'metaTitle' => 'Mentions légales',
-                'metaDescription' => 'Mentions légales du site.',
-            ]);
-        }
-
         return $this->render('mentions-legales.html.twig', [
-            'title' => $mentions->getTitle(),
-            'content' => $mentions->getContent(),
-            'metaTitle' => $mentions->getMetaTitle(),
-            'metaDescription' => $mentions->getMetaDescription() ?? '',
+            'title' => $mentions?->getTitle() ?? '',
+            'content' => $mentions?->getContent() ?? '',
+            'metaTitle' => $mentions?->getMetaTitle() ?? '',
+            'metaDescription' => $mentions?->getMetaDescription() ?? '',
         ]);
     }
 }
