@@ -28,20 +28,20 @@ class Hero
     private ?int $id = null;
 
     /**
-     * @var string|null Titre principal affiché dans la bannière
+     * @var string Titre principal affiché dans la bannière
      */
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le titre ne peut pas être vide")]
     #[Assert\Length(min: 3, max: 255, minMessage: "Le titre doit contenir au moins {{ limit }} caractères", maxMessage: "Le titre ne peut pas dépasser {{ limit }} caractères")]
-    private ?string $title = null;
+    private string $title = '';
 
     /**
-     * @var string|null Sous-titre ou texte secondaire de la bannière
+     * @var string Sous-titre ou texte secondaire de la bannière
      */
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le sous-titre ne peut pas être vide")]
     #[Assert\Length(min: 3, max: 255, minMessage: "Le sous-titre doit contenir au moins {{ limit }} caractères", maxMessage: "Le sous-titre ne peut pas dépasser {{ limit }} caractères")]
-    private ?string $subTitle = null;
+    private string $subTitle = '';
 
     /**
      * @var string|null Nom du fichier de l'image de fond stocké en base de données
@@ -71,7 +71,7 @@ class Hero
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -83,7 +83,7 @@ class Hero
         return $this;
     }
 
-    public function getSubTitle(): ?string
+    public function getSubTitle(): string
     {
         return $this->subTitle;
     }
