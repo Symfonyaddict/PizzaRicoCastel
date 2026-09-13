@@ -25,6 +25,7 @@
                         </div>
                         <div class="card-body p-4">
                             {{ form_start(form) }}
+                                <input type="hidden" name="_token" value="{{ csrf_token('admin_about') }}">
                                 <div class="mb-4">
                                     {{ form_label(form.title, 'Titre de la section', {'label_attr': {'class': 'form-label fw-bold'}}) }}
                                     {{ form_widget(form.title, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Ex: Notre Histoire'}}) }}

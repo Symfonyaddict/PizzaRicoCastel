@@ -6,7 +6,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Pizza Rico - Castelsarrasin{% endblock %}</title>
         <meta name="description" content="{% block meta_description %}Pizza Rico : Les meilleures pizzas artisanales de Castelsarrasin. Ingrédients frais et pâte maison.{% endblock %}">
-        
+        {% if app.environment != 'prod' %}
+            <meta name="robots" content="noindex, nofollow">
+        {% endif %}
+        {% set canonical_base = app_canonical_base_url is defined ? app_canonical_base_url|trim('/', side='right') : '' %}
+        {% if canonical_base is not empty and canonical_base starts with 'https://' and 'example.' not in canonical_base %}
+            <link rel="canonical" href="{{ canonical_base ~ app.request.getRequestUri() }}">
+        {% else %}
+            <link rel="canonical" href="{{ app.request.getSchemeAndHttpHost() ~ app.request.getRequestUri() }}">
+        {% endif %}
+
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🍕</text></svg>">
         {% block stylesheets %}
             <!-- Google Fonts -->
@@ -40,8 +49,9 @@
         <footer class="pb-4">
             {% include "Components/footer/footer.html.twig" %}
         </footer>
-        
-        
+
+
+
         <!-- Scripts déplacés dans app.js -->
     </body>
 </html>
