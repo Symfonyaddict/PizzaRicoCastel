@@ -23,6 +23,7 @@
                     <div class="card shadow-sm">
                         <div class="card-body p-4">
                             {{ form_start(form) }}
+                                <input type="hidden" name="_token" value="{{ csrf_token('admin_seo_edit') }}">
                                 <div class="mb-3">
                                     {{ form_label(form.pageName) }}
                                     {{ form_widget(form.pageName) }}

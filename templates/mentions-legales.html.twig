@@ -8,16 +8,14 @@
 {% block body %}
 <section class="row justify-content-center">
     <div class="col-lg-10">
-        {% if title is not empty %}
+        {% if title is defined and title is not empty %}
             <h1 class="mb-4">{{ title }}</h1>
         {% endif %}
 
-        {% if content is not empty %}
+        {% if content is defined and content is not empty %}
             <article class="prose">
                 {{ content|nl2br }}
             </article>
-        {% else %}
-            <p class="text-muted"></p>
         {% endif %}
     </div>
 </section>
