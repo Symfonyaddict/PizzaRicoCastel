@@ -1,3 +1,5 @@
+# Prérequis : générer le conteneur avant analyse
+#   bin/console cache:warmup --env=dev
 parameters:
     level: 5
     paths:
