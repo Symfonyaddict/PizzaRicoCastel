@@ -1,0 +1,22 @@
+{# Page publique des mentions légales. #}
+{# Les données (titre, contenu, SEO) proviennent exclusivement de l'entité MentionsLegales. #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ metaTitle is defined and metaTitle ? metaTitle : 'Mentions légales' }}{% endblock %}
+{% block meta_description %}{{ metaDescription is defined ? metaDescription : '' }}{% endblock %}
+
+{% block body %}
+<section class="row justify-content-center">
+    <div class="col-lg-10">
+        <h1 class="mb-4">{{ title }}</h1>
+
+        {% if content is defined and content is not empty %}
+            <article class="prose">
+                {{ content|nl2br }}
+            </article>
+        {% else %}
+            <p class="text-muted">Les mentions légales sont en cours de rédaction.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
