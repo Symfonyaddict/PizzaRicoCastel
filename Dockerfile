@@ -1,7 +1,11 @@
-FROM php:8.2-apache
+# syntax=docker/dockerfile:1.7
 
-# Installation des dépendances système et PHP
-RUN apt-get update && apt-get install -y \
+# -----------------------------
+# Stage 1 : build (composer + autoload + cache prod)
+# -----------------------------
+FROM php:8.2-apache AS builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libicu-dev \
     libpq-dev \
     libzip-dev \
@@ -10,42 +14,62 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
-    zip \
     unzip \
     git \
     curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install intl pdo pdo_pgsql pdo_mysql zip opcache gd mbstring xml exif
+    && docker-php-ext-install intl pdo pdo_pgsql zip opcache gd mbstring xml exif \
+    && rm -rf /var/lib/apt/lists/*
 
-# Activation du module rewrite d'Apache
-RUN a2enmod rewrite
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Configuration du DocumentRoot
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-# Installation de Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1 \
+    APP_ENV=prod \
+    APP_SECRET=!ChangeMe!
 
 WORKDIR /var/www/html
 
-# Copie du projet
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --no-scripts \
+    && rm -rf /tmp/* /root/.composer/cache
+
 COPY . .
+RUN composer run-script post-install-cmd --no-interaction
 
-# Installation des dépendances sans AUCUN script Symfony (évite le crash DebugBundle)
-ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV APP_ENV=prod
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+RUN rm -rf var/cache/* var/log/* \
+    && mkdir -p var/cache var/log public/images public/media \
+    && chown -R www-data:www-data var public/images public/media
 
-# Suppression du cache local et création des dossiers
-RUN rm -rf var/cache/* && \
-    mkdir -p var/cache var/log public/images && \
-    chown -R www-data:www-data var public/images
+# -----------------------------
+# Stage 2 : runtime final (sans outils de build)
+# -----------------------------
+FROM php:8.2-apache AS runtime
 
-# Gestion du script d'entrée
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libicu-dev \
+    libpq-dev \
+    libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install intl pdo pdo_pgsql zip opcache gd mbstring xml exif \
+    && a2enmod rewrite headers expires \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc /usr/share/man
+
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public \
+    APP_ENV=prod
+
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+COPY --from=builder --chown=www-data:www-data /var/www/html /var/www/html
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+WORKDIR /var/www/html
 ENTRYPOINT ["docker-entrypoint.sh"]
 EXPOSE 80
