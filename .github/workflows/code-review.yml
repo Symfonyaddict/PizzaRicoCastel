@@ -1,0 +1,61 @@
+name: Revue automatisée
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    name: Analyse statique & tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ "8.2", "8.3", "8.4" ]
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: ctype, iconv, intl, mbstring, pdo_pgsql
+          coverage: none
+          tools: composer:v2
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-php-${{ matrix.php-version }}-${{ hashFiles('composer.json') }}
+
+      - name: Installer les dépendances
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist
+          php bin/console cache:warmup --env=test --no-warmup
+
+      - name: Linting PHP
+        run: find src tests -name "*.php" -exec php -l {} \;
+
+      - name: Lint du conteneur Symfony
+        run: php bin/console lint:container --no-interaction
+
+      - name: Lint des templates Twig
+        run: php bin/console lint:twig --no-interaction templates/
+
+      - name: Lint des fichiers YAML
+        run: php bin/console lint:yaml --no-interaction config/ tests/
+
+      - name: PHPStan (niveau 5)
+        run: php vendor/bin/phpstan analyse --no-progress --no-interaction
+
+      - name: PHPUnit
+        run: php vendor/bin/phpunit --no-coverage --no-interaction
