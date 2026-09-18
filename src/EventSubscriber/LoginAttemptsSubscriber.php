@@ -46,8 +46,9 @@ final class LoginAttemptsSubscriber implements EventSubscriberInterface
         $ip = (string) $request->getClientIp();
         $limiter = $this->loginAttemptsLimiter->create($ip);
 
-        if (!$limiter->consume(0)->isAccepted()) {
-            $retryAfter = $limiter->consume(0)->getRetryAfter();
+        $quota = $limiter->consume(0);
+        if ($quota->getRemainingTokens() < 1) {
+            $retryAfter = $quota->getRetryAfter();
             $seconds = max(1, $retryAfter->getTimestamp() - time());
 
             throw new TooManyLoginAttemptsAuthenticationException($seconds);
@@ -62,7 +63,9 @@ final class LoginAttemptsSubscriber implements EventSubscriberInterface
         }
 
         $ip = (string) $request->getClientIp();
-        $this->loginAttemptsLimiter->create($ip)->consume(1);
+        if (!$event->getException() instanceof TooManyLoginAttemptsAuthenticationException) {
+            $this->loginAttemptsLimiter->create($ip)->consume(1);
+        }
 
         $session = $request->hasSession() ? $request->getSession() : null;
         if ($session instanceof FlashBagAwareSessionInterface) {
@@ -97,7 +100,7 @@ final class LoginAttemptsSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            CheckPassportEvent::class => ['onCheckPassport', 10],
+            CheckPassportEvent::class => ['onCheckPassport', 2048],
             LoginFailureEvent::class => ['onLoginFailure', 0],
             LoginSuccessEvent::class => ['onLoginSuccess', 0],
         ];

@@ -3,6 +3,8 @@
 namespace App\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -16,6 +18,19 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 final class SecurityHeadersSubscriber implements EventSubscriberInterface
 {
+    public function __construct(
+        #[Autowire('%kernel.environment%')]
+        private readonly string $environment,
+    ) {
+    }
+
+    public function onKernelRequest(RequestEvent $event): void
+    {
+        if ($event->isMainRequest()) {
+            $event->getRequest()->attributes->set('csp_nonce', bin2hex(random_bytes(16)));
+        }
+    }
+
     public function onKernelResponse(ResponseEvent $event): void
     {
         if (!$event->isMainRequest()) {
@@ -24,24 +39,23 @@ final class SecurityHeadersSubscriber implements EventSubscriberInterface
 
         $request = $event->getRequest();
         $response = $event->getResponse();
-        $appEnv = (string) ($request->server->get('APP_ENV') ?? 'dev');
-
-        $nonce = bin2hex(random_bytes(16));
-        $request->attributes->set('csp_nonce', $nonce);
+        $nonce = (string) $request->attributes->get('csp_nonce');
 
         $cspDirectives = [
             "default-src 'self'",
             "script-src 'nonce-".$nonce."' 'strict-dynamic' https:",
-            "style-src 'self' 'nonce-".$nonce."' https://cdn.jsdelivr.net https://fonts.googleapis.com",
-            "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net data:",
+            "style-src 'self' 'nonce-".$nonce."' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdnjs.cloudflare.com",
+            "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com data:",
             "img-src 'self' data: https:",
             "connect-src 'self'",
             "frame-ancestors 'none'",
             "base-uri 'self'",
             "form-action 'self'",
             "object-src 'none'",
-            "upgrade-insecure-requests",
         ];
+        if ('prod' === $this->environment && $request->isSecure()) {
+            $cspDirectives[] = 'upgrade-insecure-requests';
+        }
         $response->headers->set('Content-Security-Policy', implode('; ', $cspDirectives));
 
         $response->headers->set('X-Frame-Options', 'DENY');
@@ -49,7 +63,7 @@ final class SecurityHeadersSubscriber implements EventSubscriberInterface
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('Permissions-Policy', 'accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()');
 
-        if ('prod' === $appEnv && $request->isSecure()) {
+        if ('prod' === $this->environment && $request->isSecure()) {
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         }
     }
@@ -60,6 +74,7 @@ final class SecurityHeadersSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
+            KernelEvents::REQUEST => ['onKernelRequest', 2048],
             KernelEvents::RESPONSE => ['onKernelResponse', 0],
         ];
     }
