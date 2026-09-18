@@ -83,4 +83,4 @@ jobs:
         run: php vendor/bin/phpstan analyse --no-progress --no-interaction
 
       - name: PHPUnit
-        run: php vendor/bin/phpunit --no-coverage --no-interaction
+        run: php vendor/bin/phpunit --no-coverage
