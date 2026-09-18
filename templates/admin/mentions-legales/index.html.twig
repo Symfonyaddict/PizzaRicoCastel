@@ -25,7 +25,6 @@
                         </div>
                         <div class="card-body p-4">
                             {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
-                                <input type="hidden" name="_token" value="{{ csrf_token('admin_mentions_legales') }}">
                                 <div class="mb-4">
                                     {{ form_label(form.metaTitle, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
                                     {{ form_widget(form.metaTitle, {'attr': {'class': 'form-control'}}) }}

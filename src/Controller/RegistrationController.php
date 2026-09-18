@@ -23,14 +23,12 @@ class RegistrationController extends AbstractController
     ): Response {
         $ip = (string) $request->getClientIp();
         $registerLimiter = $registerAttemptsLimiter->create($ip);
-        $limit = $registerLimiter->consume(1);
-        $rateLimitReached = !$limit->isAccepted();
 
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($rateLimitReached) {
+        if (!$registerLimiter->consume(0)->isAccepted()) {
             $this->addFlash('error', 'Trop de tentatives d\'inscription depuis cette adresse. Réessayez dans une minute.');
 
             return $this->render('registration/register.html.twig', [
@@ -39,6 +37,7 @@ class RegistrationController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $registerLimiter->consume(1);
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 

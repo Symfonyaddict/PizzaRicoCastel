@@ -32,23 +32,17 @@ final class AdminMentionsLegalesController extends AbstractController
         $form = $this->createForm(MentionsLegalesType::class, $mentions);
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $mentions->setPageName(MentionsLegales::PAGE_NAME);
+            $mentions->setUpdatedAt(new \DateTimeImmutable());
+            $em->persist($mentions);
+            $em->flush();
+            $this->addFlash('success', 'Les mentions légales ont été mises à jour.');
+
+            return $this->redirectToRoute('app_admin_mentions_legales', status: Response::HTTP_SEE_OTHER);
+        }
+
         if ($form->isSubmitted()) {
-            if (!$this->isCsrfTokenValid('admin_mentions_legales', (string) $request->request->get('_token'))) {
-                $this->addFlash('error', 'Jeton CSRF invalide, la sauvegarde a été refusée.');
-
-                return $this->redirectToRoute('app_admin_mentions_legales', status: Response::HTTP_SEE_OTHER);
-            }
-
-            if ($form->isValid()) {
-                $mentions->setPageName(MentionsLegales::PAGE_NAME);
-                $mentions->setUpdatedAt(new \DateTimeImmutable());
-                $em->persist($mentions);
-                $em->flush();
-                $this->addFlash('success', 'Les mentions légales ont été mises à jour.');
-
-                return $this->redirectToRoute('app_admin_mentions_legales', status: Response::HTTP_SEE_OTHER);
-            }
-
             $this->addFlash('error', 'Le formulaire contient des erreurs, merci de les corriger avant enregistrement.');
         }
 

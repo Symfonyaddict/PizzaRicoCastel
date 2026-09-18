@@ -23,21 +23,15 @@ class AdminAboutController extends AbstractController
         $form = $this->createForm(AboutType::class, $about);
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($about);
+            $em->flush();
+            $this->addFlash('success', 'La section "À propos" a été mise à jour.');
+
+            return $this->redirectToRoute('app_admin_about', status: Response::HTTP_SEE_OTHER);
+        }
+
         if ($form->isSubmitted()) {
-            if (!$this->isCsrfTokenValid('admin_about', (string) $request->request->get('_token'))) {
-                $this->addFlash('error', 'Jeton CSRF invalide, la sauvegarde a été refusée.');
-
-                return $this->redirectToRoute('app_admin_about', status: Response::HTTP_SEE_OTHER);
-            }
-
-            if ($form->isValid()) {
-                $em->persist($about);
-                $em->flush();
-                $this->addFlash('success', 'La section "À propos" a été mise à jour.');
-
-                return $this->redirectToRoute('app_admin_about', status: Response::HTTP_SEE_OTHER);
-            }
-
             $this->addFlash('error', 'Le formulaire contient des erreurs, merci de les corriger avant enregistrement.');
         }
 

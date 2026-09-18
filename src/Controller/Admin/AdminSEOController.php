@@ -31,20 +31,14 @@ class AdminSEOController extends AbstractController
         $form = $this->createForm(SEOType::class, $seo);
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            $this->addFlash('success', 'Le SEO de la page a été mis à jour.');
+
+            return $this->redirectToRoute('app_admin_seo', status: Response::HTTP_SEE_OTHER);
+        }
+
         if ($form->isSubmitted()) {
-            if (!$this->isCsrfTokenValid('admin_seo_edit', (string) $request->request->get('_token'))) {
-                $this->addFlash('error', 'Jeton CSRF invalide, la sauvegarde a été refusée.');
-
-                return $this->redirectToRoute('app_admin_seo', status: Response::HTTP_SEE_OTHER);
-            }
-
-            if ($form->isValid()) {
-                $em->flush();
-                $this->addFlash('success', 'Le SEO de la page a été mis à jour.');
-
-                return $this->redirectToRoute('app_admin_seo', status: Response::HTTP_SEE_OTHER);
-            }
-
             $this->addFlash('error', 'Le formulaire contient des erreurs, merci de les corriger avant enregistrement.');
         }
 
