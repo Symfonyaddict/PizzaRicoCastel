@@ -19,6 +19,27 @@ jobs:
       matrix:
         php-version: [ "8.3", "8.4", "8.5" ]
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: ChangeMe
+          POSTGRES_DB: pizzarico
+        ports: [ "5432:5432" ]
+        options: >-
+          --health-cmd "pg_isready -U app"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      APP_ENV: dev
+      APP_SECRET: "!ChangeMe!"
+      DATABASE_URL: "postgresql://app:ChangeMe@127.0.0.1:5432/pizzarico?serverVersion=16&charset=utf8"
+      CANONICAL_BASE_URL: https://pizzarico-castelsarrasin.example.fr
+      MAILER_DSN: null://null
+
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
@@ -37,10 +58,14 @@ jobs:
           path: vendor
           key: composer-php-${{ matrix.php-version }}-${{ hashFiles('composer.json', 'composer.lock') }}
 
+      - name: Créer le fichier .env
+        run: cp .env.example .env
+
       - name: Installer les dépendances
-        run: |
-          composer install --no-interaction --no-progress --prefer-dist
-          php bin/console cache:warmup --env=test --no-warmup
+        run: composer install --no-interaction --no-progress --prefer-dist --no-scripts
+
+      - name: Warmer le cache (dev)
+        run: php bin/console cache:warmup --env=dev
 
       - name: Linting PHP
         run: find src tests -name "*.php" -exec php -l {} \;
