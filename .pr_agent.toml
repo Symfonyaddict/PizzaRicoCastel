@@ -16,7 +16,7 @@ max_model_tokens = 1000000
 ##############################
 [review]
 # Niveau de détail : 1 (léger) à 9 (exhaustif)
-review_level = 5
+review_level = 9
 
 # Focus sur les domaines critiques pour ce projet
 review_style = [
