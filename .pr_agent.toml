@@ -4,12 +4,12 @@
 ##############################
 
 [config]
-# Fournisseur et modèle à utiliser
-provider = "anthropic"
-model = "claude-3-5-sonnet-20241022"
+# Fournisseur et modele a utiliser
+provider = "google"
+model = "gemini-3.5-flash"
 
 # Token maximum pour le contexte
-max_model_tokens = 200000
+max_model_tokens = 1000000
 
 ##############################
 # Revue de code (/review)

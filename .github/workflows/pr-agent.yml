@@ -22,7 +22,7 @@ jobs:
         id: pragent
         uses: the-pr-agent/pr-agent@main
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           github_action_config.auto_describe: "false"
@@ -38,5 +38,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "## ⚠️ Échec de la revue IA\n\nLe service d'analyse par l'agent n'a pas pu s'exécuter. Vérifiez que le secret `ANTHROPIC_API_KEY` est bien configuré dans les parametres du depot."
+              body: "## ⚠️ Échec de la revue IA\n\nLe service d'analyse par l'agent n'a pas pu s'exécuter. Vérifiez que le secret `GOOGLE_API_KEY` est bien configure dans les parametres du depot."
             })
