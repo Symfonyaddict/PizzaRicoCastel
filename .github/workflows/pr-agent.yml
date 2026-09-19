@@ -1,0 +1,42 @@
+name: Revue IA — PR-Agent
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  pr_agent_job:
+    if: ${{ github.event.sender.type != 'Bot' }}
+    runs-on: ubuntu-latest
+    name: Revue de code par l'agent
+
+    steps:
+      - name: Revue — PR-Agent
+        id: pragent
+        uses: the-pr-agent/pr-agent@main
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          github_action_config.auto_describe: "false"
+          github_action_config.auto_review: "true"
+          github_action_config.auto_improve: "false"
+
+      - name: Publier le rapport de revue
+        if: always() && steps.pragent.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "## ⚠️ Échec de la revue IA\n\nLe service d'analyse par l'agent n'a pas pu s'exécuter. Vérifiez que le secret `GOOGLE_API_KEY` est bien configure dans les parametres du depot."
+            })

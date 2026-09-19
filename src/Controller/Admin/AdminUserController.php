@@ -11,10 +11,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
+#[Route('/admin/user')]
 class AdminUserController extends AbstractController
 {
-    #[Route('/admin/user', name: 'app_admin_user')]
+    #[Route('/', name: 'app_admin_user')]
     public function index(UserRepository $userRepository): Response
     {
         return $this->render('admin/user/index.html.twig', [
@@ -23,7 +26,7 @@ class AdminUserController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/user/edit/{id}', name: 'app_admin_user_edit')]
+    #[Route('/edit/{id}', name: 'app_admin_user_edit')]
     public function edit(User $user, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(UserType::class, $user);
@@ -48,7 +51,7 @@ class AdminUserController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/user/delete/{id}', name: 'app_admin_user_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_admin_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         $currentUser = $this->getUser();

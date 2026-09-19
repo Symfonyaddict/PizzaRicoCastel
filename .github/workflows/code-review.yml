@@ -1,0 +1,86 @@
+name: Revue automatisée
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    name: Analyse statique & tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ "8.3", "8.4", "8.5" ]
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: ChangeMe
+          POSTGRES_DB: pizzarico
+        ports: [ "5432:5432" ]
+        options: >-
+          --health-cmd "pg_isready -U app"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      APP_ENV: dev
+      APP_SECRET: "!ChangeMe!"
+      DATABASE_URL: "postgresql://app:ChangeMe@127.0.0.1:5432/pizzarico?serverVersion=16&charset=utf8"
+      CANONICAL_BASE_URL: https://pizzarico-castelsarrasin.example.fr
+      MAILER_DSN: null://null
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: ctype, iconv, intl, mbstring, pdo_pgsql
+          coverage: none
+          tools: composer:v2
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-php-${{ matrix.php-version }}-${{ hashFiles('composer.json', 'composer.lock') }}
+
+      - name: Créer le fichier .env
+        run: cp .env.example .env
+
+      - name: Installer les dépendances
+        run: composer install --no-interaction --no-progress --prefer-dist --no-scripts
+
+      - name: Warmer le cache (dev)
+        run: php bin/console cache:warmup --env=dev
+
+      - name: Linting PHP
+        run: find src tests -name "*.php" -exec php -l {} \;
+
+      - name: Lint du conteneur Symfony
+        run: php bin/console lint:container --no-interaction
+
+      - name: Lint des templates Twig
+        run: php bin/console lint:twig --no-interaction templates/
+
+      - name: Lint des fichiers YAML
+        run: php bin/console lint:yaml --no-interaction config/ tests/
+
+      - name: PHPStan (niveau 5)
+        run: php vendor/bin/phpstan analyse --no-progress --no-interaction
+
+      - name: PHPUnit
+        run: php vendor/bin/phpunit --no-coverage
