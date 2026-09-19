@@ -4,11 +4,12 @@
 ##############################
 
 [config]
-# Modèle à utiliser (compatible OpenAI API key)
-model = "gpt-4o-mini"
+# Fournisseur et modèle à utiliser
+provider = "anthropic"
+model = "claude-3-5-sonnet-20241022"
 
 # Token maximum pour le contexte
-max_model_tokens = 8000
+max_model_tokens = 200000
 
 ##############################
 # Revue de code (/review)
